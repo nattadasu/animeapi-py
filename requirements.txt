@@ -1,0 +1,3 @@
+aiohttp
+dacite
+requests
