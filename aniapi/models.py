@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from typing import Dict, List, Optional, Union
 
@@ -100,9 +100,15 @@ class UpdatedStruct:
     """ISO 8601 formatted timestamp of the update"""
 
     # add datetime object
-    def datetime(self) -> datetime:
-        """Returns a datetime object of the timestamp"""
-        return datetime.fromtimestamp(self.timestamp)
+    def datetime(self, tz: timezone = timezone.utc) -> datetime:
+        """
+        Returns a datetime object of the timestamp
+        
+        :param tz: The timezone to use
+        :type tz: timezone
+        :return: The datetime object
+        """
+        return datetime.fromtimestamp(self.timestamp, tz=tz)
 
 
 @dataclass
