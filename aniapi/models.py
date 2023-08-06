@@ -4,6 +4,45 @@ from enum import Enum
 from typing import Dict, List, Optional, Union
 
 
+class Platform(Enum):
+    """Supported Platforms Enum"""
+
+    ANIDB = ADB = "anidb"
+    """AniDB"""
+    ANILIST = AL = "anilist"
+    """AniList"""
+    ANIMEPLANET = AP = ANIPLA = "animeplanet"
+    """Anime-Planet"""
+    ANISEARCH = AS = "anisearch"
+    """aniSearch"""
+    ANNICT = "annict"
+    """Annict"""
+    IMDB = "imdb"
+    """IMDb, only for v3 API or above"""
+    KAIZE = KZ = "kaize"
+    """Kaize"""
+    KITSU = KT = "kitsu"
+    """Kitsu"""
+    LIVECHART = LC = "livechart"
+    """LiveChart"""
+    MYANIMELIST = MAL = "myanimelist"
+    """MyAnimeList"""
+    NOTIFYMOE = NOTIFY = NM = "notify"
+    """Notify.moe"""
+    OTAKOTAKU = OT = "otakotaku"
+    """Otak Otaku"""
+    SHIKIMORI = SH = "shikimori"
+    """Shikimori"""
+    SHOBOI = SYOBOI = SHOBOCAL = SYOBOCAL = "shoboi"
+    """Shobocalendar"""
+    SILVERYASHA = DBTI = "silveryasha"
+    """SilverYasha Database Tontonan Indonesia"""
+    THEMOVIEDB = TMDB = "themoviedb"
+    """TheMovieDB, only for v3 API or above"""
+    TRAKT = "trakt"
+    """Trakt"""
+
+
 class TraktMediaType(Enum):
     """Trakt Media Type Enum"""
 
