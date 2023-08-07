@@ -31,7 +31,7 @@ Models
 Exceptions
 ----------
 
-.. automodule:: animeapi.exceptions
+.. automodule:: animeapi.excepts
     :members:
 
     .. automethod:: __init__
