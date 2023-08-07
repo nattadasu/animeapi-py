@@ -1,0 +1,43 @@
+[build-system]
+requires      = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "animeapi"
+authors = [
+    {name = "nattadasu", email = "hello@nattadasu.my.id"}
+]
+description = "A Python wrapper for the AnimeAPI by nattadasu with type hints and additional async support."
+dependencies = [
+    "requests",
+    "aiohttp",
+    "dacite",
+]
+requires-python = ">=3.6"
+license = {text = "AGPL-3.0-or-later"}
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Typing :: Typed",
+]
+keywords = ["anime", "api", "wrapper", "async", "python", "animeapi", "nattadasu", "relations", "mappings", "type hints", "type annotations"]
+dynamic = ["version", "readme"]
+
+[project.urls]
+Source = "https://github.com/nattadasu/animeapi-py"
+"Bug Tracker" = "https://github.com/nattadasu/animeapi-py/issues"
+Homepage = "https://animeapi.my.id"
+
+[tool.setuptools.dynamic]
+version = { attr = "animeapi.__version__" }
+readme = { file = "README.md", content-type = "text/markdown" }
