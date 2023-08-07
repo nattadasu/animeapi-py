@@ -178,7 +178,7 @@ class AnimeAPI:
         if platform in ["imdb", "themoviedb"] and self.base_url == models.Version.V2.value:
             raise excepts.UnsupportedVersion(f"{platform} is not supported on V2")
         
-        req = self._get(f"/{platform}%28%29.json")
+        req = self._get(f"/{platform}().json")
 
         if req.status_code not in [200, 302, 304]:
             req.raise_for_status()

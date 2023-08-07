@@ -169,7 +169,7 @@ class AsyncAnimeAPI:
         if platform in ["imdb", "themoviedb"] and self.base_url == models.Version.V2.value:
             raise excepts.UnsupportedVersion(f"{platform} is not supported on V2")
 
-        async with self.session.get(f"{self.base_url}/{platform}%28%29.json", timeout=self.timeout, headers=self.headers) as req:
+        async with self.session.get(f"{self.base_url}/{platform}().json", timeout=self.timeout, headers=self.headers) as req:
             if req.status not in [200, 302, 304]:
                 raise aiohttp.ClientResponseError(req.request_info, req.history, code=req.status)
             return conv.convert_from_list(await req.json())
