@@ -61,6 +61,13 @@ class TraktMediaType(Enum):
     """Movie"""
 
 
+class TmdbMediaType(Enum):
+    """TheMovieDB Media Type Enum"""
+
+    MOVIE = "movie"
+    """Movie"""
+
+
 @dataclass
 class AnimeRelation:
     """Anime Relations Dataclass"""

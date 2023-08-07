@@ -1,11 +1,12 @@
 from datetime import datetime, timezone
-from typing import Any, Dict, Optional, Union, Literal, List
+from enum import Enum
+from typing import Any, Dict, List, Optional, Union
 
 import requests
 
-import animeapi.models as models
 import animeapi.converter as conv
 import animeapi.excepts as excepts
+import animeapi.models as models
 
 
 class AnimeAPI:
@@ -62,7 +63,7 @@ class AnimeAPI:
             self,
             title_id: Union[str, int],
             platform: Union[str, models.Platform],
-            media_type: Union[models.TraktMediaType, Literal["shows", "movies"], None] = None,
+            media_type: Union[models.TraktMediaType, models.TmdbMediaType, str, None] = None,
             title_season: Optional[int] = None,
         ) -> models.AnimeRelation:
         """
@@ -73,19 +74,19 @@ class AnimeAPI:
         :param platform: The platform to get the relations from
         :type platform: Union[str, models.Platform]
         :param media_type: The media type to get the relations from, defaults to None
-        :type media_type: Union[models.TraktMediaType, Literal["shows", "movies"], None] (optional)
+        :type media_type: Union[models.TraktMediaType, models.TmdbMediaType, str, None] (optional)
         :param title_season: The season of the anime in Trakt, defaults to None
         :type title_season: Optional[int] (optional)
         :return: The relations for the anime
         :rtype: models.AnimeRelation
-        :raises excepts.MissingRequirement: Raised if the platform is trakt but no media_type is provided
+        :raises excepts.MissingRequirement: Raised if the platform is Trakt or TMDB but no media_type is provided
         :raises excepts.UnsupportedVersion: Raised if the platform is IMDb or TMDB but using V2
-        :raises ValueError: Raised if the platform is trakt but the title_season is 0
         :raises requests.HTTPError: Raised if the request fails
+        :raises ValueError: Raised if the platform is trakt but the title_season is 0
         """
         if isinstance(platform, models.Platform):
             platform = platform.value
-        if isinstance(media_type, models.TraktMediaType):
+        if isinstance(media_type, Enum):
             media_type = media_type.value
 
         # check if platform is either IMDb or TMDB but using V2
@@ -94,20 +95,26 @@ class AnimeAPI:
 
         if platform == "trakt" and media_type is None:
             raise excepts.MissingRequirement("Trakt requires a media type")
+        if platform == "themoviedb" and media_type is None:
+            raise excepts.MissingRequirement("TMDB requires a media type")
+        if platform == "themoviedb" and media_type == "shows":
+            raise ValueError("AnimeAPI does not support TMDB TV shows entry yet")
         if platform == "trakt" and title_season == 0:
             raise ValueError("AnimeAPI does not support season 0 (specials) for Trakt shows")
 
         # build path
+        season = ""
         if platform == "trakt":
-            path = f"/{platform}/{media_type}/{title_id}"
+            title_id = f"{media_type}/{title_id}"
             if title_season is not None and media_type == "shows":
-                path += f"/seasons/{title_season}"
+                season = f"/seasons/{title_season}"
+        elif platform == "themoviedb":
+            title_id = f"{media_type}/{title_id}"
         elif platform == "shikimori":
             title_id = str(title_id)
             if not title_id.isdigit():
                 # drop any non-digit characters
                 title_id = "".join([c for c in title_id if c.isdigit()])
-            path = f"/{platform}/{title_id}"
         elif platform == "kitsu":
             title_id = str(title_id)
             if not title_id.isdigit():
@@ -116,9 +123,8 @@ class AnimeAPI:
                 if slug_req.status_code != 200:
                     slug_req.raise_for_status()
                 title_id = slug_req.json()["data"][0]["id"]
-            path = f"/{platform}/{title_id}"
-        else:
-            path = f"/{platform}/{title_id}"
+
+        path = f"/{platform}/{title_id}{season}"
 
         req = self._get(path)
 
@@ -139,8 +145,8 @@ class AnimeAPI:
         :return: The relations for the anime
         :rtype: Dict[str, models.AnimeRelation]
         :raises excepts.UnsupportedVersion: Raised if the platform is IMDb or TMDB but using V2
-        :raises ValueError: Raised if the platform is trakt but the title_season is 0
         :raises requests.HTTPError: Raised if the request fails
+        :raises ValueError: Raised if the platform is trakt but the title_season is 0
         """
         if isinstance(platform, models.Platform):
             platform = platform.value
