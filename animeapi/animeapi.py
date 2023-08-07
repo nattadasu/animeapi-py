@@ -3,9 +3,9 @@ from typing import Any, Dict, Optional, Union, Literal, List
 
 import requests
 
-import aniapi.models as models
-import aniapi.converter as conv
-import aniapi.excepts as excepts
+import animeapi.models as models
+import animeapi.converter as conv
+import animeapi.excepts as excepts
 
 
 class AnimeAPI:

@@ -1,6 +1,6 @@
-from aniapi.aniapi import AnimeAPI
-from aniapi.excepts import MissingRequirement, UnsupportedVersion
-from aniapi.models import (AnimeRelation, ApiStatus, CountStruct, Heartbeat,
+from animeapi.animeapi import AnimeAPI
+from animeapi.excepts import MissingRequirement, UnsupportedVersion
+from animeapi.models import (AnimeRelation, ApiStatus, CountStruct, Heartbeat,
                            Platform, TraktMediaType, UpdatedStruct, Version)
 
 __all__ = [
