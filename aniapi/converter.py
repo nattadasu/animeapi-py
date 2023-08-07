@@ -2,41 +2,41 @@ from typing import Any, Dict, List, Union
 
 from dacite import Config, from_dict
 
-from aniapi.models import AnimeRelations, ApiStatus, Heartbeat, TraktMediaType
+from aniapi.models import AnimeRelation, ApiStatus, Heartbeat, TraktMediaType
 
 
-def convert_arm(data: Dict[str, Union[str, int, None]]) -> AnimeRelations:
+def convert_arm(data: Dict[str, Union[str, int, None]]) -> AnimeRelation:
     """
-    Converts a dict to an AnimeRelations object
+    Converts a dict to an AnimeRelation object
 
     :param data: The dict to convert
     :type data: Dict[str, Union[str, int, None]]
-    :return: The converted AnimeRelations object
-    :rtype: AnimeRelations
+    :return: The converted AnimeRelation object
+    :rtype: AnimeRelation
     """
-    return from_dict(data_class=AnimeRelations, data=data, config=Config(cast=[TraktMediaType]))
+    return from_dict(data_class=AnimeRelation, data=data, config=Config(cast=[TraktMediaType]))
 
 
-def convert_from_dict(data: Dict[str, Dict[str, Union[str, int, None]]]) -> Dict[str, AnimeRelations]:
+def convert_from_dict(data: Dict[str, Dict[str, Union[str, int, None]]]) -> Dict[str, AnimeRelation]:
     """
-    Converts a dict of dicts to a dict of AnimeRelations objects
+    Converts a dict of dicts to a dict of AnimeRelation objects
 
     :param data: The dict to convert
     :type data: Dict[str, Dict[str, Union[str, int, None]]]
     :return: The converted dict
-    :rtype: Dict[str, AnimeRelations]
+    :rtype: Dict[str, AnimeRelation]
     """
     return {key: convert_arm(value) for key, value in data.items()}
 
 
-def convert_from_list(data: List[Dict[str, Union[str, int, None]]]) -> List[AnimeRelations]:
+def convert_from_list(data: List[Dict[str, Union[str, int, None]]]) -> List[AnimeRelation]:
     """
-    Converts a list of dicts to a list of AnimeRelations objects
+    Converts a list of dicts to a list of AnimeRelation objects
 
     :param data: The list to convert
     :type data: List[Dict[str, Union[str, int, None]]]
     :return: The converted list
-    :rtype: List[AnimeRelations]
+    :rtype: List[AnimeRelation]
     """
     return [convert_arm(value) for value in data]
 

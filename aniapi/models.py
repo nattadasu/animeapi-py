@@ -4,6 +4,15 @@ from enum import Enum
 from typing import Dict, List, Optional, Union
 
 
+class Version(Enum):
+    """API Version Enum"""
+
+    V2 = "https://aniapi.nattadasu.my.id"
+    """Version 2"""
+    V3 = "https://animeapi.my.id"
+    """Version 3"""
+
+
 class Platform(Enum):
     """Supported Platforms Enum"""
 
@@ -53,7 +62,7 @@ class TraktMediaType(Enum):
 
 
 @dataclass
-class AnimeRelations:
+class AnimeRelation:
     """Anime Relations Dataclass"""
 
     title: str
@@ -100,7 +109,7 @@ class AnimeRelations:
 
     def to_dict(self) -> Dict[str, Union[str, int, None]]:
         """
-        Converts the AnimeRelations object to a dictionary
+        Converts the AnimeRelation object to a dictionary
 
         :return: The converted dictionary
         """
