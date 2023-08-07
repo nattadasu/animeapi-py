@@ -81,6 +81,7 @@ class AnimeAPI:
         :raises excepts.MissingRequirement: Raised if the platform is trakt but no media_type is provided
         :raises excepts.UnsupportedVersion: Raised if the platform is IMDb or TMDB but using V2
         :raises ValueError: Raised if the platform is trakt but the title_season is 0
+        :raises requests.HTTPError: Raised if the request fails
         """
         if isinstance(platform, models.Platform):
             platform = platform.value
@@ -139,6 +140,7 @@ class AnimeAPI:
         :rtype: Dict[str, models.AnimeRelation]
         :raises excepts.UnsupportedVersion: Raised if the platform is IMDb or TMDB but using V2
         :raises ValueError: Raised if the platform is trakt but the title_season is 0
+        :raises requests.HTTPError: Raised if the request fails
         """
         if isinstance(platform, models.Platform):
             platform = platform.value
@@ -153,7 +155,6 @@ class AnimeAPI:
             req.raise_for_status()
 
         return conv.convert_from_dict(req.json())
-    
 
     def get_list_anime_relations(
             self,
@@ -168,6 +169,7 @@ class AnimeAPI:
         :rtype: List[models.AnimeRelation]
         :raises excepts.UnsupportedVersion: Raised if the platform is IMDb or TMDB but using V2
         :raises ValueError: Raised if the platform is trakt but the title_season is 0
+        :raises requests.HTTPError: Raised if the request fails
         """
         if isinstance(platform, models.Platform):
             platform = platform.value
