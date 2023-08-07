@@ -13,7 +13,7 @@ Installation
 
 .. code:: sh
 
-   pip install animeapi
+   pip install animeapi-py
 
 Depending on your system, you may need to use ``pip3`` instead of
 ``pip``, or ``sudo pip`` instead of ``pip``.
@@ -56,6 +56,9 @@ Asyncronous Usage
 
 Similarly, for async, you just need to replace ``AnimeAPI`` with
 ``AsyncAnimeAPI`` and use ``await`` on the methods.
+
+You must use the wrapper in ``with`` statement, or you will receive
+``RuntimeError`` exception.
 
 .. code:: py
 

@@ -23,6 +23,7 @@ class AsyncAnimeAPI:
         ) -> None:
         """
         Initializes the AnimeAPI class
+
         :param base_url: The base URL to use for requests, defaults to models.Version.V3
         :type base_url: Union[models.Version, str] (optional)
         :param timeout: The timeout for requests, defaults to 100
@@ -217,7 +218,7 @@ class AsyncAnimeAPI:
         Gets the status of the API
 
         :return: The status of the API
-        :rtype: models.Status
+        :rtype: models.ApiStatus
         :raises aiohttp.ClientResponseError: Raised if the request to the API fails
         :raises excepts.UnsupportedVersion: Raised if the base_url is V2
         :raises RuntimeError: Raised if the session is not initialized

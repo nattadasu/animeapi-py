@@ -22,6 +22,7 @@ class AnimeAPI:
         ) -> None:
         """
         Initializes the AnimeAPI class
+
         :param base_url: The base URL to use for requests, defaults to models.Version.V3
         :type base_url: Union[models.Version, str] (optional)
         :param timeout: The timeout for requests, defaults to 100
@@ -206,7 +207,7 @@ class AnimeAPI:
         Gets the status of the API
 
         :return: The status of the API
-        :rtype: models.Status
+        :rtype: models.ApiStatus
         :raises excepts.UnsupportedVersion: Raised if the base_url is V2
         :raises requests.HTTPError: Raised if the request fails
         """
