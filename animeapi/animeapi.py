@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 from enum import Enum
+from json import loads
 from typing import Any, Dict, List, Optional, Union
 
 import requests
@@ -132,7 +133,7 @@ class AnimeAPI:
         if req.status_code != 200:
             req.raise_for_status()
         
-        return conv.convert_arm(req.json())
+        return conv.convert_arm(loads(req.text))
 
     def get_dict_anime_relations(
             self,
@@ -161,7 +162,7 @@ class AnimeAPI:
         if req.status_code not in [200, 302, 304]:
             req.raise_for_status()
 
-        return conv.convert_from_dict(req.json())
+        return conv.convert_from_dict(loads(req.text))
 
     def get_list_anime_relations(
             self,
@@ -190,7 +191,7 @@ class AnimeAPI:
         if req.status_code not in [200, 302, 304]:
             req.raise_for_status()
 
-        return conv.convert_from_list(req.json())
+        return conv.convert_from_list(loads(req.text))
 
     def get_list_index(self) -> List[models.AnimeRelation]:
         """
@@ -219,7 +220,7 @@ class AnimeAPI:
         if req.status_code != 200:
             req.raise_for_status()
         
-        return conv.convert_api_status(req.json())
+        return conv.convert_api_status(loads(req.text))
 
     def get_heartbeat(self) -> models.Heartbeat:
         """
@@ -238,7 +239,7 @@ class AnimeAPI:
         if req.status_code != 200:
             req.raise_for_status()
         
-        return conv.convert_heartbeat(req.json())
+        return conv.convert_heartbeat(loads(req.text))
 
     def get_updated_time(self, use_datetime: bool = False) -> Union[str, datetime]:
         """
