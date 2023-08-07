@@ -99,7 +99,7 @@ class AnimeRelation:
     """Shikimori ID of the anime, without the prefix"""
     silveryasha: Optional[int] = None
     """SilverYasha Database Tontonan Indonesia ID of the anime"""
-    themoviedb: Optional[int | str] = None
+    themoviedb: Union[int, str, None] = None
     """TheMovieDB ID of the anime, only for movies"""
     trakt: Optional[int] = None
     """Trakt ID of the anime"""
