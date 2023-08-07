@@ -105,7 +105,7 @@ class AnimeRelation:
     """Trakt ID of the anime"""
     trakt_season: Optional[int] = None
     """Trakt Season ID of the anime, None if its a movie"""
-    trakt_type: Union[TraktMediaType, None] = None
+    trakt_type: Optional[TraktMediaType] = None
 
     def to_dict(self) -> Dict[str, Union[str, int, None]]:
         """
