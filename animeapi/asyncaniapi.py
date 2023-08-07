@@ -16,14 +16,14 @@ class AsyncAnimeAPI:
     def __init__(
             self,
             base_url: Union[models.Version, str] = models.Version.V3,
-            timeout: Optional[int] = 10,
+            timeout: Optional[int] = 100,
             headers: Optional[Dict[str, Any]] = None
         ) -> None:
         """
         Initializes the AnimeAPI class
         :param base_url: The base URL to use for requests, defaults to models.Version.V3
         :type base_url: Union[models.Version, str] (optional)
-        :param timeout: The timeout for requests, defaults to 10
+        :param timeout: The timeout for requests, defaults to 100
         :type timeout: int (optional)
         :param headers: The headers to use for requests, defaults to None
         :type headers: Dict[str, Any] (optional)
@@ -233,9 +233,9 @@ class AsyncAnimeAPI:
             if req.status != 200:
                 raise aiohttp.ClientResponseError(req.request_info, req.history, code=req.status)
 
-        if use_datetime:
-            time = datetime.strptime(await req.text(), "Updated on %d/%m/%Y %H:%M:%S UTC")
-            time = time.replace(tzinfo=timezone.utc)
-            return time
-        else:
-            return await req.text()
+            if use_datetime:
+                time = datetime.strptime(await req.text(), "Updated on %d/%m/%Y %H:%M:%S UTC")
+                time = time.replace(tzinfo=timezone.utc)
+                return time
+            else:
+                return await req.text()
