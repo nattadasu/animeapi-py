@@ -77,9 +77,7 @@ Similarly, for async, you just need to replace ``AnimeAPI`` with
 Documentation
 -------------
 
-.. raw:: html
-
-   <!-- You can find the documentation for the wrapper [here](https://animeapi-py.readthedocs.io/en/latest/). -->
+You can find the documentation for the wrapper `here <https://animeapi-py.readthedocs.io/en/latest/>`__
 
 Available Methods
 ~~~~~~~~~~~~~~~~~
