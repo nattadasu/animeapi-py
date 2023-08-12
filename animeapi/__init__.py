@@ -4,7 +4,7 @@ from animeapi.excepts import MissingRequirement, UnsupportedVersion
 from animeapi.models import (AnimeRelation, ApiStatus, CountStruct, Heartbeat,
                            Platform, TraktMediaType, UpdatedStruct, Version)
 
-__version__ = "3.0.1"
+__version__ = "3.1.0"
 
 __all__ = [
     "AnimeAPI",
