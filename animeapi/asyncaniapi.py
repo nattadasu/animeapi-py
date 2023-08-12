@@ -85,7 +85,7 @@ class AsyncAnimeAPI:
         :raises excepts.MissingRequirement: Raised if the platform is trakt but no media_type is provided
         :raises excepts.UnsupportedVersion: Raised if the platform is IMDb or TMDB but using V2
         :raises RuntimeError: Raised if the session is not initialized
-        :raises ValueError: Raised if the platform is trakt but the title_season is 0
+        :raises ValueError: Raised if the AnimeAPI does not support the feature
         """
         if self.session is None:
             raise RuntimeError("Session is not initialized")
@@ -114,7 +114,7 @@ class AsyncAnimeAPI:
         season = ""
         if platform == "trakt":
             if not f"{title_id}".isdigit():
-                raise NotImplementedError("Media ID of Trakt is not an integer ID. Please resolve it first before continuing")
+                raise ValueError("Media ID of Trakt is not an integer ID. Please resolve it first before continuing")
             title_id = f"{media_type}/{title_id}"
             if title_season is not None and media_type == "shows":
                 season = f"/seasons/{title_season}"
