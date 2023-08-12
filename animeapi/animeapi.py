@@ -95,18 +95,22 @@ class AnimeAPI:
         if platform in ["imdb", "themoviedb"] and self.base_url == models.Version.V2.value:
             raise excepts.UnsupportedVersion(f"{platform} is not supported on V2")
 
-        if platform == "trakt" and media_type is None:
-            raise excepts.MissingRequirement("Trakt requires a media type")
-        if platform == "themoviedb" and media_type is None:
-            raise excepts.MissingRequirement("TMDB requires a media type")
-        if platform == "themoviedb" and media_type == "shows":
-            raise ValueError("AnimeAPI does not support TMDB TV shows entry yet")
-        if platform == "trakt" and title_season == 0:
-            raise ValueError("AnimeAPI does not support season 0 (specials) for Trakt shows")
+        if platform == "trakt":
+            if media_type is None:
+                raise excepts.MissingRequirement("Trakt requires a media type")
+            if title_season == 0:
+                raise ValueError("AnimeAPI does not support season 0 (specials) for Trakt shows")
+        elif platform == "themoviedb":
+            if media_type is None:
+                raise excepts.MissingRequirement("TMDB requires a media type")
+            elif media_type == "shows":
+                raise ValueError("AnimeAPI does not support TMDB TV shows entry yet")
 
         # build path
         season = ""
         if platform == "trakt":
+            if not f"{title_id}".isdigit():
+                raise NotImplementedError("Media ID of Trakt is not an integer ID. Please resolve it first before continuing")
             title_id = f"{media_type}/{title_id}"
             if title_season is not None and media_type == "shows":
                 season = f"/seasons/{title_season}"
