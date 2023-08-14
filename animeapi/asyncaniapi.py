@@ -19,9 +19,7 @@ from animeapi import excepts, models
 
 
 class AsyncAnimeAPI:
-    """
-    The main class for interacting with the aniapi API
-    """
+    """The main class for interacting with the aniapi API"""
 
     def __init__(
         self,
@@ -48,23 +46,17 @@ class AsyncAnimeAPI:
         self.session: Optional[aiohttp.ClientSession] = None
 
     async def __aenter__(self):
-        """
-        Allows the class to be used as a context manager
-        """
+        """Allows the class to be used as a context manager"""
         if self.session is None:
             self.session = aiohttp.ClientSession()
         return self
 
     async def __aexit__(self, exc_type, exc_value, traceback):  # type: ignore
-        """
-        Allows the class to be used as a context manager
-        """
+        """Allows the class to be used as a context manager"""
         await self.close()
 
     async def close(self) -> None:
-        """
-        Closes the session
-        """
+        """Closes the session"""
         if self.session is not None:
             await self.session.close()
         return
