@@ -166,7 +166,7 @@ class UpdatedStruct:
     def datetime(self, tz: timezone = timezone.utc) -> datetime:
         """
         Returns a datetime object of the timestamp
-        
+
         :param tz: The timezone to use
         :type tz: timezone
         :return: The datetime object
@@ -257,7 +257,7 @@ class Heartbeat:
     def datetime(self, tz: timezone = timezone.utc) -> datetime:
         """
         Returns a datetime object of the heartbeat's request epoch
-        
+
         :param tz: The timezone to use, defaults to timezone.utc
         :type tz: timezone
         :return: The datetime object
@@ -278,10 +278,11 @@ class Updated:
     def datetime(self) -> datetime:
         """
         Convert str response to datetime class
-        
+
         :return: the datetime object
         :rtype: datetime
         """
-        time = datetime.strptime(self.message, "Updated on %m/%d/%Y %H:%M:%S UTC")
+        time = datetime.strptime(
+            self.message, "Updated on %m/%d/%Y %H:%M:%S UTC")
         time = time.replace(tzinfo=timezone.utc)
         return time

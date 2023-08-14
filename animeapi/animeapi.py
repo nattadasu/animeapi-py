@@ -24,11 +24,11 @@ class AnimeAPI:
     """
 
     def __init__(
-            self,
-            base_url: Union[models.Version, str] = models.Version.V3,
-            timeout: Optional[int] = 100,
-            headers: Optional[Dict[str, Any]] = None
-        ) -> None:
+        self,
+        base_url: Union[models.Version, str] = models.Version.V3,
+        timeout: Optional[int] = 100,
+        headers: Optional[Dict[str, Any]] = None
+    ) -> None:
         """
         Initializes the AnimeAPI class
 
@@ -72,12 +72,13 @@ class AnimeAPI:
             headers=self.headers)
 
     def get_anime_relations(
-            self,
-            title_id: Union[str, int],
-            platform: Union[str, models.Platform],
-            media_type: Union[models.TraktMediaType, models.TmdbMediaType, str, None] = None,
-            title_season: Optional[int] = None,
-        ) -> models.AnimeRelation:
+        self,
+        title_id: Union[str, int],
+        platform: Union[str, models.Platform],
+        media_type: Union[models.TraktMediaType,
+                          models.TmdbMediaType, str, None] = None,
+        title_season: Optional[int] = None,
+    ) -> models.AnimeRelation:
         """
         Gets the relations for an anime
 
@@ -103,18 +104,21 @@ class AnimeAPI:
 
         # check if platform is either IMDb or TMDB but using V2
         if platform in ["imdb", "themoviedb"] and self.base_url == models.Version.V2.value:
-            raise excepts.UnsupportedVersion(f"{platform} is not supported on V2")
+            raise excepts.UnsupportedVersion(
+                f"{platform} is not supported on V2")
 
         if platform == "trakt":
             if media_type is None:
                 raise excepts.MissingRequirement("Trakt requires a media type")
             if title_season == 0:
-                raise ValueError("AnimeAPI does not support season 0 (specials) for Trakt shows")
+                raise ValueError(
+                    "AnimeAPI does not support season 0 (specials) for Trakt shows")
         elif platform == "themoviedb":
             if media_type is None:
                 raise excepts.MissingRequirement("TMDB requires a media type")
             if media_type == "shows":
-                raise ValueError("AnimeAPI does not support TMDB TV shows entry yet")
+                raise ValueError(
+                    "AnimeAPI does not support TMDB TV shows entry yet")
 
         # build path
         season = ""
@@ -153,9 +157,9 @@ class AnimeAPI:
         return conv.convert_arm(loads(req.text))
 
     def get_dict_anime_relations(
-            self,
-            platform: Union[str, models.Platform],
-        ) -> Dict[str, models.AnimeRelation]:
+        self,
+        platform: Union[str, models.Platform],
+    ) -> Dict[str, models.AnimeRelation]:
         """
         Gets the relations for anime available on the platform as a dictionary
 
@@ -172,7 +176,8 @@ class AnimeAPI:
 
         # check if platform is either IMDb or TMDB but using V2
         if platform in ["imdb", "themoviedb"] and self.base_url == models.Version.V2.value:
-            raise excepts.UnsupportedVersion(f"{platform} is not supported on V2")
+            raise excepts.UnsupportedVersion(
+                f"{platform} is not supported on V2")
 
         req = self._get(f"/{platform}.json")
 
@@ -182,9 +187,9 @@ class AnimeAPI:
         return conv.convert_from_dict(loads(req.text))
 
     def get_list_anime_relations(
-            self,
-            platform: Union[str, models.Platform],
-        ) -> List[models.AnimeRelation]:
+        self,
+        platform: Union[str, models.Platform],
+    ) -> List[models.AnimeRelation]:
         """
         Gets the relations for anime available on the platform as a list
 
@@ -201,7 +206,8 @@ class AnimeAPI:
 
         # check if platform is either IMDb or TMDB but using V2
         if platform in ["imdb", "themoviedb"] and self.base_url == models.Version.V2.value:
-            raise excepts.UnsupportedVersion(f"{platform} is not supported on V2")
+            raise excepts.UnsupportedVersion(
+                f"{platform} is not supported on V2")
 
         req = self._get(f"/{platform}().json")
 
@@ -213,7 +219,7 @@ class AnimeAPI:
     def get_list_index(self) -> List[models.AnimeRelation]:
         """
         Get AnimeAPI full list index of known anime in the database
-        
+
         :return: The list index of known anime in the database
         :rtype: List[models.AnimeRelation]
         :raises requests.HTTPError: Raised if the request fails
@@ -249,7 +255,8 @@ class AnimeAPI:
         :raises requests.HTTPError: Raised if the request fails
         """
         if self.base_url == models.Version.V2.value:
-            raise excepts.UnsupportedVersion("Heartbeat is only supported on V3")
+            raise excepts.UnsupportedVersion(
+                "Heartbeat is only supported on V3")
 
         req = self._get("/heartbeat")
 
