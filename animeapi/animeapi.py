@@ -19,9 +19,7 @@ from animeapi import excepts, models
 
 
 class AnimeAPI:
-    """
-    The main class for interacting with the aniapi API
-    """
+    """The main class for interacting with the aniapi API"""
 
     def __init__(
         self,
@@ -47,15 +45,11 @@ class AnimeAPI:
             self.base_url = base_url
 
     def __enter__(self):
-        """
-        Allows the class to be used as a context manager
-        """
+        """Allows the class to be used as a context manager"""
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):  # type: ignore
-        """
-        Allows the class to be used as a context manager
-        """
+        """Allows the class to be used as a context manager"""
 
     def _get(self, endpoint: str) -> requests.Response:
         """
