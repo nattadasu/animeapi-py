@@ -24,11 +24,11 @@ class AsyncAnimeAPI:
     """
 
     def __init__(
-            self,
-            base_url: Union[models.Version, str] = models.Version.V3,
-            timeout: Optional[int] = 100,
-            headers: Optional[Dict[str, Any]] = None
-        ) -> None:
+        self,
+        base_url: Union[models.Version, str] = models.Version.V3,
+        timeout: Optional[int] = 100,
+        headers: Optional[Dict[str, Any]] = None
+    ) -> None:
         """
         Initializes the AnimeAPI class
 
@@ -70,12 +70,13 @@ class AsyncAnimeAPI:
         return
 
     async def get_anime_relations(
-            self,
-            title_id: Union[str, int],
-            platform: Union[str, models.Platform],
-            media_type: Union[models.TraktMediaType, models.TmdbMediaType, str, None] = None,
-            title_season: Optional[int] = None,
-        ) -> models.AnimeRelation:
+        self,
+        title_id: Union[str, int],
+        platform: Union[str, models.Platform],
+        media_type: Union[models.TraktMediaType,
+                          models.TmdbMediaType, str, None] = None,
+        title_season: Optional[int] = None,
+    ) -> models.AnimeRelation:
         """
         Gets the relations for an anime
 
@@ -105,7 +106,8 @@ class AsyncAnimeAPI:
 
         # check if platform is either IMDb or TMDB but using V2
         if platform in ["imdb", "themoviedb"] and self.base_url == models.Version.V2.value:
-            raise excepts.UnsupportedVersion(f"{platform} is not supported on V2")
+            raise excepts.UnsupportedVersion(
+                f"{platform} is not supported on V2")
 
         if platform == "trakt":
             if media_type is None:
@@ -117,7 +119,8 @@ class AsyncAnimeAPI:
             if media_type is None:
                 raise excepts.MissingRequirement("TMDB requires a media type")
             if media_type == "shows":
-                raise ValueError("AnimeAPI does not support TMDB TV shows entry yet")
+                raise ValueError(
+                    "AnimeAPI does not support TMDB TV shows entry yet")
 
         # build path
         season = ""
@@ -140,7 +143,7 @@ class AsyncAnimeAPI:
             if not title_id.isdigit():
                 async with self.session.get(
                     f"https://kitsu.io/api/edge/anime?filter[slug]={title_id}",
-                    timeout=self.timeout) as slug_req:
+                        timeout=self.timeout) as slug_req:
                     if slug_req.status != 200:
                         raise aiohttp.ClientResponseError(
                             slug_req.request_info,
@@ -153,7 +156,7 @@ class AsyncAnimeAPI:
         async with self.session.get(
             f"{self.base_url}{path}",
             timeout=self.timeout,
-            headers=self.headers) as req:
+                headers=self.headers) as req:
             if req.status != 200:
                 raise aiohttp.ClientResponseError(
                     req.request_info,
@@ -162,9 +165,9 @@ class AsyncAnimeAPI:
             return conv.convert_arm(loads(await req.text()))
 
     async def get_dict_anime_relations(
-            self,
-            platform: Union[str, models.Platform],
-        ) -> Dict[str, models.AnimeRelation]:
+        self,
+        platform: Union[str, models.Platform],
+    ) -> Dict[str, models.AnimeRelation]:
         """
         Gets the relations for anime available on the platform as a dictionary
 
@@ -185,12 +188,13 @@ class AsyncAnimeAPI:
 
         # check if platform is either IMDb or TMDB but using V2
         if platform in ["imdb", "themoviedb"] and self.base_url == models.Version.V2.value:
-            raise excepts.UnsupportedVersion(f"{platform} is not supported on V2")
+            raise excepts.UnsupportedVersion(
+                f"{platform} is not supported on V2")
 
         async with self.session.get(
             f"{self.base_url}/{platform}.json",
             timeout=self.timeout,
-            headers=self.headers) as req:
+                headers=self.headers) as req:
             if req.status not in [200, 302, 304]:
                 raise aiohttp.ClientResponseError(
                     req.request_info,
@@ -198,11 +202,10 @@ class AsyncAnimeAPI:
                     code=req.status)
             return conv.convert_from_dict(loads(await req.text()))
 
-
     async def get_list_anime_relations(
-            self,
-            platform: Union[str, models.Platform],
-        ) -> List[models.AnimeRelation]:
+        self,
+        platform: Union[str, models.Platform],
+    ) -> List[models.AnimeRelation]:
         """
         Gets the relations for anime available on the platform as a list
 
@@ -223,20 +226,22 @@ class AsyncAnimeAPI:
 
         # check if platform is either IMDb or TMDB but using V2
         if platform in ["imdb", "themoviedb"] and self.base_url == models.Version.V2.value:
-            raise excepts.UnsupportedVersion(f"{platform} is not supported on V2")
+            raise excepts.UnsupportedVersion(
+                f"{platform} is not supported on V2")
 
         async with self.session.get(
             f"{self.base_url}/{platform}().json",
             timeout=self.timeout,
-            headers=self.headers) as req:
+                headers=self.headers) as req:
             if req.status not in [200, 302, 304]:
-                raise aiohttp.ClientResponseError(req.request_info, req.history, code=req.status)
+                raise aiohttp.ClientResponseError(
+                    req.request_info, req.history, code=req.status)
             return conv.convert_from_list(loads(await req.text()))
 
     async def get_list_index(self) -> List[models.AnimeRelation]:
         """
         Get AnimeAPI full list index of known anime in the database
-        
+
         :return: The list index of known anime in the database
         :rtype: List[models.AnimeRelation]
         :raises aiohttp.ClientResponseError: Raised if the request to the API fails
@@ -266,7 +271,7 @@ class AsyncAnimeAPI:
         async with self.session.get(
             f"{self.base_url}/status",
             timeout=self.timeout,
-            headers=self.headers) as req:
+                headers=self.headers) as req:
             if req.status != 200:
                 raise aiohttp.ClientResponseError(
                     req.request_info,
@@ -288,12 +293,13 @@ class AsyncAnimeAPI:
             raise RuntimeError("Session is not initialized")
 
         if self.base_url == models.Version.V2.value:
-            raise excepts.UnsupportedVersion("Heartbeat is only supported on V3")
+            raise excepts.UnsupportedVersion(
+                "Heartbeat is only supported on V3")
 
         async with self.session.get(
             f"{self.base_url}/heartbeat",
             timeout=self.timeout,
-            headers=self.headers) as req:
+                headers=self.headers) as req:
             if req.status != 200:
                 raise aiohttp.ClientResponseError(
                     req.request_info,
@@ -316,7 +322,7 @@ class AsyncAnimeAPI:
         async with self.session.get(
             f"{self.base_url}/updated",
             timeout=self.timeout,
-            headers=self.headers) as req:
+                headers=self.headers) as req:
             if req.status != 200:
                 raise aiohttp.ClientResponseError(
                     req.request_info,
