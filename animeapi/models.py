@@ -262,10 +262,10 @@ class Heartbeat:
 class Updated:
     """Class model for "Updated" path"""
 
-    def __init__(message: str):
+    def __init__(self, message: str):
         self.message = message
 
-    def __repr__():
+    def __repr__(self):
         return f"{self.message}"
 
     def convert_to_datetime(self) -> datetime:
@@ -275,6 +275,6 @@ class Updated:
         :return: the datetime object
         :rtype: datetime
         """
-        time = datetime.strptime(self.message, "Updated on %d/%m/%Y %H:%M:%S UTC")
+        time = datetime.strptime(self.message, "Updated on %m/%d/%Y %H:%M:%S UTC")
         time = time.replace(tzinfo=timezone.utc)
         return time
