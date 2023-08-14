@@ -256,7 +256,7 @@ class Heartbeat:
         :return: The datetime object
         :rtype: datetime
         """
-        return datetime.fromtimestamp(self.timestamp, tz=tz)
+        return datetime.fromtimestamp(self.request_epoch, tz=tz)
 
 
 class Updated:
