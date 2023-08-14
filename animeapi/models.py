@@ -1,3 +1,10 @@
+"""
+animeapi.models
+~~~~~~~~~~~~~~~
+
+This module contains the dataclasses, enums, and other models used by the API.
+"""
+
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from enum import Enum

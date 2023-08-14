@@ -1,3 +1,13 @@
+"""
+animeapi.converter
+~~~~~~~~~~~~~~~~~~
+
+This module contains the set of AnimeAPI's converters, which are used to convert
+the API's responses to objects.
+
+This module is not meant to be used directly. Use the API's methods instead.
+"""
+
 from typing import Any, Dict, List, Union
 
 from dacite import Config, from_dict
@@ -14,10 +24,15 @@ def convert_arm(data: Dict[str, Union[str, int, None]]) -> AnimeRelation:
     :return: The converted AnimeRelation object
     :rtype: AnimeRelation
     """
-    return from_dict(data_class=AnimeRelation, data=data, config=Config(cast=[TraktMediaType]))
+    return from_dict(
+        data_class=AnimeRelation,
+        data=data,
+        config=Config(cast=[TraktMediaType]))
 
 
-def convert_from_dict(data: Dict[str, Dict[str, Union[str, int, None]]]) -> Dict[str, AnimeRelation]:
+def convert_from_dict(
+    data: Dict[str, Dict[str, Union[str, int, None]]]
+) -> Dict[str, AnimeRelation]:
     """
     Converts a dict of dicts to a dict of AnimeRelation objects
 
@@ -29,7 +44,9 @@ def convert_from_dict(data: Dict[str, Dict[str, Union[str, int, None]]]) -> Dict
     return {key: convert_arm(value) for key, value in data.items()}
 
 
-def convert_from_list(data: List[Dict[str, Union[str, int, None]]]) -> List[AnimeRelation]:
+def convert_from_list(
+    data: List[Dict[str, Union[str, int, None]]]
+) -> List[AnimeRelation]:
     """
     Converts a list of dicts to a list of AnimeRelation objects
 

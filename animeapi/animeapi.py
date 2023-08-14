@@ -1,4 +1,13 @@
-from datetime import datetime, timezone
+"""
+animeapi.animeapi
+~~~~~~~~~~~~~~~~~~
+
+This module contains the synchronous AnimeAPI class, the main class for
+interacting with AnimeAPI.
+
+Please refer to the documentation for more information and examples.
+"""
+
 from enum import Enum
 from json import loads
 from typing import Any, Dict, List, Optional, Union
@@ -6,8 +15,7 @@ from typing import Any, Dict, List, Optional, Union
 import requests
 
 import animeapi.converter as conv
-import animeapi.excepts as excepts
-import animeapi.models as models
+from animeapi import excepts, models
 
 
 class AnimeAPI:
@@ -43,12 +51,11 @@ class AnimeAPI:
         Allows the class to be used as a context manager
         """
         return self
-    
+
     def __exit__(self, exc_type, exc_value, traceback):  # type: ignore
         """
         Allows the class to be used as a context manager
         """
-        pass
 
     def _get(self, endpoint: str) -> requests.Response:
         """
@@ -59,7 +66,10 @@ class AnimeAPI:
         :return: The response from the API
         :rtype: requests.Response
         """
-        return requests.get(f"{self.base_url}{endpoint}", timeout=self.timeout, headers=self.headers)
+        return requests.get(
+            f"{self.base_url}{endpoint}",
+            timeout=self.timeout,
+            headers=self.headers)
 
     def get_anime_relations(
             self,
@@ -103,14 +113,15 @@ class AnimeAPI:
         elif platform == "themoviedb":
             if media_type is None:
                 raise excepts.MissingRequirement("TMDB requires a media type")
-            elif media_type == "shows":
+            if media_type == "shows":
                 raise ValueError("AnimeAPI does not support TMDB TV shows entry yet")
 
         # build path
         season = ""
         if platform == "trakt":
             if not f"{title_id}".isdigit():
-                raise ValueError("Media ID of Trakt is not an integer ID. Please resolve it first before continuing")
+                raise ValueError(
+                    "Media ID of Trakt is not an integer ID. Please resolve it first before continuing")
             title_id = f"{media_type}/{title_id}"
             if title_season is not None and media_type == "shows":
                 season = f"/seasons/{title_season}"
@@ -125,7 +136,9 @@ class AnimeAPI:
             title_id = str(title_id)
             if not title_id.isdigit():
                 # if its slug, try fetch from Kitsu to resolve the slug
-                slug_req = requests.get(f"https://kitsu.io/api/edge/anime?filter[slug]={title_id}", timeout=self.timeout)
+                slug_req = requests.get(
+                    f"https://kitsu.io/api/edge/anime?filter[slug]={title_id}",
+                    timeout=self.timeout)
                 if slug_req.status_code != 200:
                     slug_req.raise_for_status()
                 title_id = slug_req.json()["data"][0]["id"]
@@ -136,7 +149,7 @@ class AnimeAPI:
 
         if req.status_code != 200:
             req.raise_for_status()
-        
+
         return conv.convert_arm(loads(req.text))
 
     def get_dict_anime_relations(
@@ -156,11 +169,11 @@ class AnimeAPI:
         """
         if isinstance(platform, models.Platform):
             platform = platform.value
-        
+
         # check if platform is either IMDb or TMDB but using V2
         if platform in ["imdb", "themoviedb"] and self.base_url == models.Version.V2.value:
             raise excepts.UnsupportedVersion(f"{platform} is not supported on V2")
-        
+
         req = self._get(f"/{platform}.json")
 
         if req.status_code not in [200, 302, 304]:
@@ -189,7 +202,7 @@ class AnimeAPI:
         # check if platform is either IMDb or TMDB but using V2
         if platform in ["imdb", "themoviedb"] and self.base_url == models.Version.V2.value:
             raise excepts.UnsupportedVersion(f"{platform} is not supported on V2")
-        
+
         req = self._get(f"/{platform}().json")
 
         if req.status_code not in [200, 302, 304]:
@@ -223,7 +236,7 @@ class AnimeAPI:
 
         if req.status_code != 200:
             req.raise_for_status()
-        
+
         return conv.convert_api_status(loads(req.text))
 
     def get_heartbeat(self) -> models.Heartbeat:
@@ -242,7 +255,7 @@ class AnimeAPI:
 
         if req.status_code != 200:
             req.raise_for_status()
-        
+
         return conv.convert_heartbeat(loads(req.text))
 
     def get_updated_time(self) -> models.Updated:

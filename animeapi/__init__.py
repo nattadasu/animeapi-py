@@ -1,3 +1,14 @@
+"""
+animeapi
+~~~~~~~~
+
+A Python wrapper for the AnimeAPI by nattadasu with type hints and additional
+async support.
+
+:license: AGPL-3.0, see LICENSE for more details.
+:author: nattadasu
+"""
+
 from animeapi.animeapi import AnimeAPI
 from animeapi.asyncaniapi import AsyncAnimeAPI
 from animeapi.excepts import MissingRequirement, UnsupportedVersion
