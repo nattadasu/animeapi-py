@@ -154,8 +154,8 @@ This method equals to the ``/heartbeat`` endpoint on the API.
    heartbeat = api.get_heartbeat()
    print(heartbeat)
 
-``get_updated_time(self, use_datetime: bool = False) -> Updated``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``get_updated_time() -> Updated``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This method equals to the ``/updated`` endpoint on the API.
 
