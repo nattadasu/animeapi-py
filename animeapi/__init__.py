@@ -1,6 +1,6 @@
 """
 animeapi
-~~~~~~~~
+========
 
 A Python wrapper for the AnimeAPI by nattadasu with type hints and additional
 async support.

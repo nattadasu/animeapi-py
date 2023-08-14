@@ -1,6 +1,6 @@
 """
 animeapi.excepts
-~~~~~~~~~~~~~~~~
+----------------
 
 This module contains the set of AnimeAPI's exceptions.
 """

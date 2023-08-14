@@ -1,6 +1,6 @@
 """
 animeapi.asyncaniapi
-~~~~~~~~~~~~~~~~~~~~
+--------------------
 
 This module contains the asynchronous AnimeAPI class, the main class for
 interacting with AnimeAPI through asynchronous requests.

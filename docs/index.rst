@@ -1,37 +1,27 @@
 AnimeAPI Reference Docs
 =======================
 
-AnimeAPI
---------
-
-.. autoclass:: animeapi.AnimeAPI
+.. autoclass:: animeapi.animeapi
     :members:
 
     .. automethod:: __init__
 
-
-AsyncAnimeAPI
--------------
-
-.. autoclass:: animeapi.AsyncAnimeAPI
+.. autoclass:: animeapi.asyncaniapi
     :members:
 
     .. automethod:: __init__
-
-
-Models
-------
 
 .. automodule:: animeapi.models
     :members:
 
     .. automethod:: __init__
 
-
-Exceptions
-----------
-
 .. automodule:: animeapi.excepts
+    :members:
+
+    .. automethod:: __init__
+
+.. automodule:: animeapi.converter
     :members:
 
     .. automethod:: __init__

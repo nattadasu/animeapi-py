@@ -1,6 +1,6 @@
 """
 animeapi.models
-~~~~~~~~~~~~~~~
+---------------
 
 This module contains the dataclasses, enums, and other models used by the API.
 """

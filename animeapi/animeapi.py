@@ -1,6 +1,6 @@
 """
 animeapi.animeapi
-~~~~~~~~~~~~~~~~~~
+-----------------
 
 This module contains the synchronous AnimeAPI class, the main class for
 interacting with AnimeAPI.

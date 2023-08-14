@@ -1,6 +1,6 @@
 """
 animeapi.converter
-~~~~~~~~~~~~~~~~~~
+------------------
 
 This module contains the set of AnimeAPI's converters, which are used to convert
 the API's responses to objects.
