@@ -268,7 +268,7 @@ class Updated:
     def __repr__(self):
         return f"{self.message}"
 
-    def convert_to_datetime(self) -> datetime:
+    def datetime(self) -> datetime:
         """
         Convert str response to datetime class
         
