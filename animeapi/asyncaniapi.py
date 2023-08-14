@@ -259,14 +259,12 @@ class AsyncAnimeAPI:
                 raise aiohttp.ClientResponseError(req.request_info, req.history, code=req.status)
             return conv.convert_heartbeat(loads(await req.text()))
 
-    async def get_updated_time(self, use_datetime: bool = False) -> Union[str, datetime]:
+    async def get_updated_time(self) -> models.Updated:
         """
         Gets the time the database was last updated, a subset/simple request from /status endpoint
 
-        :param use_datetime: Whether to return a datetime object or a string, defaults to False
-        :type use_datetime: bool, optional
         :return: The time the database was last updated
-        :rtype: Union[str, datetime]
+        :rtype: models.Updated
         :raises aiohttp.ClientResponseError: Raised if the request to the API fails
         :raises RuntimeError: Raised if the session is not initialized
         """
@@ -277,9 +275,5 @@ class AsyncAnimeAPI:
             if req.status != 200:
                 raise aiohttp.ClientResponseError(req.request_info, req.history, code=req.status)
 
-            if use_datetime:
-                time = datetime.strptime(await req.text(), "Updated on %d/%m/%Y %H:%M:%S UTC")
-                time = time.replace(tzinfo=timezone.utc)
-                return time
-            else:
-                return await req.text()
+            text = await req.text()
+            return models.Updated(text)

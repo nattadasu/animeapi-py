@@ -154,8 +154,8 @@ This method equals to the ``/heartbeat`` endpoint on the API.
    heartbeat = api.get_heartbeat()
    print(heartbeat)
 
-``get_updated_time(self, use_datetime: bool = False) -> str | str``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+``get_updated_time(self, use_datetime: bool = False) -> Updated``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This method equals to the ``/updated`` endpoint on the API.
 
@@ -164,6 +164,7 @@ This method equals to the ``/updated`` endpoint on the API.
    # Get last updated time of AnimeAPI
    updated = api.get_updated_time(True)
    print(updated)
+   print(updated.datetime())  # Convert to datetime class
 
 License
 -------

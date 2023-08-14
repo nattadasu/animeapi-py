@@ -245,14 +245,12 @@ class AnimeAPI:
         
         return conv.convert_heartbeat(loads(req.text))
 
-    def get_updated_time(self, use_datetime: bool = False) -> Union[str, datetime]:
+    def get_updated_time(self) -> models.Updated:
         """
         Gets the time the database was last updated, a subset/simple request from /status endpoint
 
-        :param use_datetime: Whether to return a datetime object or a string, defaults to False
-        :type use_datetime: bool, optional
         :return: The time the database was last updated
-        :rtype: Union[str, datetime]
+        :rtype: models.Updated
         :raises requests.HTTPError: Raised if the request fails
         """
         req = self._get("/updated")
@@ -260,9 +258,4 @@ class AnimeAPI:
         if req.status_code != 200:
             req.raise_for_status()
 
-        if use_datetime:
-            time = datetime.strptime(req.text, "Updated on %d/%m/%Y %H:%M:%S UTC")
-            time = time.replace(tzinfo=timezone.utc)
-            return time
-        else:
-            return req.text
+        return models.Updated(req.text)

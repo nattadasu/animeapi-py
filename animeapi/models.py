@@ -119,6 +119,7 @@ class AnimeRelation:
         Converts the AnimeRelation object to a dictionary
 
         :return: The converted dictionary
+        :rtype: Dict[str, Union[str, int, None]]
         """
         return {
             "title": self.title,
@@ -162,6 +163,7 @@ class UpdatedStruct:
         :param tz: The timezone to use
         :type tz: timezone
         :return: The datetime object
+        :rtype: datetime
         """
         return datetime.fromtimestamp(self.timestamp, tz=tz)
 
@@ -244,3 +246,35 @@ class Heartbeat:
     """Request time of the API"""
     request_epoch: float
     """Request epoch of the API"""
+
+    def datetime(self, tz: timezone = timezone.utc) -> datetime:
+        """
+        Returns a datetime object of the heartbeat's request epoch
+        
+        :param tz: The timezone to use, defaults to timezone.utc
+        :type tz: timezone
+        :return: The datetime object
+        :rtype: datetime
+        """
+        return datetime.fromtimestamp(self.timestamp, tz=tz)
+
+
+class Updated:
+    """Class model for "Updated" path"""
+
+    def __init__(message: str):
+        self.message = message
+
+    def __repr__():
+        return f"{self.message}"
+
+    def convert_to_datetime(self) -> datetime:
+        """
+        Convert str response to datetime class
+        
+        :return: the datetime object
+        :rtype: datetime
+        """
+        time = datetime.strptime(self.message, "Updated on %d/%m/%Y %H:%M:%S UTC")
+        time = time.replace(tzinfo=timezone.utc)
+        return time
