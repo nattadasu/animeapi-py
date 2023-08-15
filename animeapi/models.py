@@ -8,7 +8,7 @@ This module contains the dataclasses, enums, and other models used by the API.
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from enum import Enum
-from typing import Dict, List, Optional, Literal
+from typing import Dict, List, Literal, Optional
 
 try:
     from typing import TypedDict
@@ -128,6 +128,7 @@ class TypedAnimeRelationDict(TypedDict):
     """Trakt Season ID of the anime, None if its a movie"""
     trakt_type: Optional[Literal['shows', 'movies']] = None
     """Trakt Media Type of the anime"""
+
 
 @dataclass
 class AnimeRelation:
