@@ -21,10 +21,11 @@ Depending on your system, you may need to use ``pip3`` instead of
 Requirements
 ~~~~~~~~~~~~
 
--  Python 3.6 or higher
--  `requests <https://pypi.org/project/requests/>`__
+-  Python 3.7 or higher
 -  `aiohttp <https://pypi.org/project/aiohttp/>`__ (for async support)
 -  `dacite <https://pypi.org/project/dacite/>`__
+-  `requests <https://pypi.org/project/requests/>`__
+-  `typing_extensions <https://pypi.org/project/typing-extensions/>`__ (for Python <= 3.8)
 
 Usage
 -----
