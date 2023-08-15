@@ -14,7 +14,7 @@ dependencies = [
     "dacite",
     "typing-extensions ; python_version < '3.8'"
 ]
-requires-python = ">=3.6"
+requires-python = ">=3.7"
 license = {text = "AGPL-3.0-or-later"}
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -23,12 +23,12 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Typing :: Typed",
 ]
 keywords = ["anime", "api", "wrapper", "async", "python", "animeapi", "nattadasu", "relations", "mappings", "type hints", "type annotations"]
