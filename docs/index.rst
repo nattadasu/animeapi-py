@@ -1,25 +1,41 @@
 AnimeAPI Reference Docs
 =======================
 
-.. autoclass:: animeapi.animeapi
+Synchronous Class (AnimeAPI)
+----------------------------
+
+.. autoclass:: animeapi.AnimeAPI
     :members:
 
     .. automethod:: __init__
 
-.. autoclass:: animeapi.asyncaniapi
+Asynchronous Class (AsyncAnimeAPI)
+----------------------------------
+
+.. autoclass:: animeapi.AsyncAnimeAPI
     :members:
 
     .. automethod:: __init__
+
+Models/Typings
+--------------
 
 .. automodule:: animeapi.models
     :members:
 
     .. automethod:: __init__
 
+Exceptions
+----------
+
 .. automodule:: animeapi.excepts
     :members:
 
     .. automethod:: __init__
+
+
+Internal Converter
+------------------
 
 .. automodule:: animeapi.converter
     :members:
@@ -30,8 +46,6 @@ AnimeAPI Reference Docs
    :hidden:
 
    index
-
-
 
 Indices and tables
 ==================
