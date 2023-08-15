@@ -1,3 +1,4 @@
 aiohttp
 dacite
 requests
+typing_extensions ; python_version < "3.8"

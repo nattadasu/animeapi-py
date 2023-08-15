@@ -8,7 +8,12 @@ This module contains the dataclasses, enums, and other models used by the API.
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from enum import Enum
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional, Literal
+
+try:
+    from typing import TypedDict
+except ImportError:
+    from typing_extensions import TypedDict  # type: ignore
 
 
 class Version(Enum):
@@ -75,6 +80,55 @@ class TmdbMediaType(Enum):
     """Movie"""
 
 
+class TypedAnimeRelationDict(TypedDict):
+    """
+    Typed Anime Relation Dictionary, used when user explicitly wants to use a
+    dictionary using AnimeRelation.to_dict() method
+    """
+
+    title: str
+    """Title of the anime"""
+    anidb: Optional[int] = None
+    """aniDB ID of the anime, without the prefix"""
+    anilist: Optional[int] = None
+    """AniList ID of the anime"""
+    animeplanet: Optional[str] = None
+    """Anime-Planet slug of the anime"""
+    anisearch: Optional[int] = None
+    """aniSearch ID of the anime"""
+    annict: Optional[int] = None
+    """Annict ID of the anime"""
+    imdb: Optional[str] = None
+    """IMDb ID of the anime, mostly for movies"""
+    kaize: Optional[str] = None
+    """Kaize slug of the anime"""
+    kaize_id: Optional[int] = None
+    """Kaize ID of the anime, used internally for the Kaize API"""
+    kitsu: Optional[int] = None
+    """Kitsu ID of the anime"""
+    livechart: Optional[int] = None
+    """LiveChart ID of the anime"""
+    myanimelist: Optional[int] = None
+    """MyAnimeList ID of the anime"""
+    notify: Optional[str] = None
+    """Notify.moe Base64 of the anime"""
+    otakotaku: Optional[int] = None
+    """Otak Otaku ID of the anime"""
+    shoboi: Optional[int] = None
+    """Shoboi ID of the anime"""
+    shikimori: Optional[int] = None
+    """Shikimori ID of the anime, without the prefix"""
+    silveryasha: Optional[int] = None
+    """SilverYasha Database Tontonan Indonesia ID of the anime"""
+    themoviedb: Optional[int] = None
+    """TheMovieDB ID of the anime, only for movies"""
+    trakt: Optional[int] = None
+    """Trakt ID of the anime"""
+    trakt_season: Optional[int] = None
+    """Trakt Season ID of the anime, None if its a movie"""
+    trakt_type: Optional[Literal['shows', 'movies']] = None
+    """Trakt Media Type of the anime"""
+
 @dataclass
 class AnimeRelation:
     """Anime Relations Dataclass"""
@@ -113,22 +167,23 @@ class AnimeRelation:
     """Shikimori ID of the anime, without the prefix"""
     silveryasha: Optional[int] = None
     """SilverYasha Database Tontonan Indonesia ID of the anime"""
-    themoviedb: Union[int, str, None] = None
+    themoviedb: Optional[int] = None
     """TheMovieDB ID of the anime, only for movies"""
     trakt: Optional[int] = None
     """Trakt ID of the anime"""
     trakt_season: Optional[int] = None
     """Trakt Season ID of the anime, None if its a movie"""
     trakt_type: Optional[TraktMediaType] = None
+    """Trakt Media Type of the anime"""
 
-    def to_dict(self) -> Dict[str, Union[str, int, None]]:
+    def to_dict(self) -> TypedAnimeRelationDict:
         """
         Converts the AnimeRelation object to a dictionary
 
         :return: The converted dictionary
-        :rtype: Dict[str, Union[str, int, None]]
+        :rtype: TypedAnimeRelationDict
         """
-        return {
+        return TypedDict("TypedAnimeRelationDict", {
             "title": self.title,
             "anidb": self.anidb,
             "anilist": self.anilist,
@@ -150,7 +205,7 @@ class AnimeRelation:
             "trakt": self.trakt,
             "trakt_season": self.trakt_season,
             "trakt_type": self.trakt_type.value if self.trakt_type else None,
-        }
+        })
 
 
 @dataclass
@@ -167,8 +222,8 @@ class UpdatedStruct:
         """
         Returns a datetime object of the timestamp
 
-        :param tz: The timezone to use
-        :type tz: timezone
+        :param tz: The timezone to use, defaults to UTC
+        :type tz: timezone = timezone.utc
         :return: The datetime object
         :rtype: datetime
         """
