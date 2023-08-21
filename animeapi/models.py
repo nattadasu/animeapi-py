@@ -35,9 +35,9 @@ class Platform(Enum):
     ANIMEPLANET = AP = ANIPLA = "animeplanet"
     """Anime-Planet"""
     ANISEARCH = AS = "anisearch"
-    """aniSearch"""
+    """aniSearch, a German anime database"""
     ANNICT = "annict"
-    """Annict"""
+    """Annict, a Japanese anime database"""
     IMDB = "imdb"
     """IMDb, only for v3 API or above"""
     KAIZE = KZ = "kaize"
@@ -45,19 +45,21 @@ class Platform(Enum):
     KITSU = KT = "kitsu"
     """Kitsu"""
     LIVECHART = LC = "livechart"
-    """LiveChart"""
+    """LiveChart, a TV schedule database"""
     MYANIMELIST = MAL = "myanimelist"
     """MyAnimeList"""
+    NAUTILJON = NJ = "nautiljon"
+    """Nautiljon, a French anime database"""
     NOTIFYMOE = NOTIFY = NM = "notify"
     """Notify.moe"""
     OTAKOTAKU = OT = "otakotaku"
-    """Otak Otaku"""
+    """Otak Otaku, an Indonesian anime database"""
     SHIKIMORI = SH = "shikimori"
-    """Shikimori"""
+    """Shikimori, a Russian anime database"""
     SHOBOI = SYOBOI = SHOBOCAL = SYOBOCAL = "shoboi"
-    """Shobocalendar"""
+    """Shobocalendar, a TV schedule database in Japanese"""
     SILVERYASHA = DBTI = "silveryasha"
-    """SilverYasha Database Tontonan Indonesia"""
+    """SilverYasha Database Tontonan Indonesia, an Indonesian anime database for aggregated streaming links"""
     THEMOVIEDB = TMDB = "themoviedb"
     """TheMovieDB, only for v3 API or above"""
     TRAKT = "trakt"
@@ -88,45 +90,49 @@ class TypedAnimeRelationDict(TypedDict):
 
     title: str
     """Title of the anime"""
-    anidb: Optional[int] = None
+    anidb: Optional[int]
     """aniDB ID of the anime, without the prefix"""
-    anilist: Optional[int] = None
+    anilist: Optional[int]
     """AniList ID of the anime"""
-    animeplanet: Optional[str] = None
+    animeplanet: Optional[str]
     """Anime-Planet slug of the anime"""
-    anisearch: Optional[int] = None
+    anisearch: Optional[int]
     """aniSearch ID of the anime"""
-    annict: Optional[int] = None
+    annict: Optional[int]
     """Annict ID of the anime"""
-    imdb: Optional[str] = None
+    imdb: Optional[str]
     """IMDb ID of the anime, mostly for movies"""
-    kaize: Optional[str] = None
+    kaize: Optional[str]
     """Kaize slug of the anime"""
-    kaize_id: Optional[int] = None
+    kaize_id: Optional[int]
     """Kaize ID of the anime, used internally for the Kaize API"""
-    kitsu: Optional[int] = None
+    kitsu: Optional[int]
     """Kitsu ID of the anime"""
-    livechart: Optional[int] = None
+    livechart: Optional[int]
     """LiveChart ID of the anime"""
-    myanimelist: Optional[int] = None
+    myanimelist: Optional[int]
     """MyAnimeList ID of the anime"""
-    notify: Optional[str] = None
+    nautiljon: Optional[str]
+    """Nautiljon slug in plus format of the anime"""
+    nautiljon_id: Optional[int]
+    """Nautiljon ID of the anime, used internally by Nautiljon"""
+    notify: Optional[str]
     """Notify.moe Base64 of the anime"""
-    otakotaku: Optional[int] = None
+    otakotaku: Optional[int]
     """Otak Otaku ID of the anime"""
-    shoboi: Optional[int] = None
+    shoboi: Optional[int]
     """Shoboi ID of the anime"""
-    shikimori: Optional[int] = None
+    shikimori: Optional[int]
     """Shikimori ID of the anime, without the prefix"""
-    silveryasha: Optional[int] = None
+    silveryasha: Optional[int]
     """SilverYasha Database Tontonan Indonesia ID of the anime"""
-    themoviedb: Optional[int] = None
+    themoviedb: Optional[int]
     """TheMovieDB ID of the anime, only for movies"""
-    trakt: Optional[int] = None
+    trakt: Optional[int]
     """Trakt ID of the anime"""
-    trakt_season: Optional[int] = None
+    trakt_season: Optional[int]
     """Trakt Season ID of the anime, None if its a movie"""
-    trakt_type: Optional[Literal['shows', 'movies']] = None
+    trakt_type: Optional[Literal['shows', 'movies']]
     """Trakt Media Type of the anime"""
 
 
@@ -158,6 +164,10 @@ class AnimeRelation:
     """LiveChart ID of the anime"""
     myanimelist: Optional[int] = None
     """MyAnimeList ID of the anime"""
+    nautiljon: Optional[str] = None
+    """Nautiljon slug in plus format of the anime"""
+    nautiljon_id: Optional[int] = None
+    """Nautiljon ID of the anime, used internally by Nautiljon"""
     notify: Optional[str] = None
     """Notify.moe Base64 of the anime"""
     otakotaku: Optional[int] = None
@@ -184,7 +194,7 @@ class AnimeRelation:
         :return: The converted dictionary
         :rtype: TypedAnimeRelationDict
         """
-        return TypedDict("TypedAnimeRelationDict", {
+        return {
             "title": self.title,
             "anidb": self.anidb,
             "anilist": self.anilist,
@@ -197,6 +207,8 @@ class AnimeRelation:
             "kitsu": self.kitsu,
             "livechart": self.livechart,
             "myanimelist": self.myanimelist,
+            "nautiljon": self.nautiljon,
+            "nautiljon_id": self.nautiljon_id,
             "notify": self.notify,
             "otakotaku": self.otakotaku,
             "shoboi": self.shoboi,
@@ -206,7 +218,7 @@ class AnimeRelation:
             "trakt": self.trakt,
             "trakt_season": self.trakt_season,
             "trakt_type": self.trakt_type.value if self.trakt_type else None,
-        })
+        }
 
 
 @dataclass
@@ -257,6 +269,8 @@ class CountStruct:
     """LiveChart count"""
     myanimelist: Optional[int] = None
     """MyAnimeList count"""
+    nauitljon: Optional[int] = None
+    """Nautiljon count"""
     notify: Optional[int] = None
     """Notify.moe count"""
     otakotaku: Optional[int] = None
