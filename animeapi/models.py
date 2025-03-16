@@ -19,8 +19,6 @@ except ImportError:
 class Version(Enum):
     """API Version Enum"""
 
-    V2 = "https://aniapi.nattadasu.my.id"
-    """Version 2"""
     V3 = "https://animeapi.my.id"
     """Version 3"""
 
@@ -54,6 +52,8 @@ class Platform(Enum):
     """Notify.moe"""
     OTAKOTAKU = OT = "otakotaku"
     """Otak Otaku, an Indonesian anime database"""
+    SIMKL = SMK = ANIMECOUNTDOWN = AC = "simkl"
+    """SIMKL"""
     SHIKIMORI = SH = "shikimori"
     """Shikimori, a Russian anime database"""
     SHOBOI = SYOBOI = SHOBOCAL = SYOBOCAL = "shoboi"
@@ -120,6 +120,8 @@ class TypedAnimeRelationDict(TypedDict):
     """Notify.moe Base64 of the anime"""
     otakotaku: Optional[int]
     """Otak Otaku ID of the anime"""
+    simkl: Optional[int]
+    """SIMKL ID of the anime"""
     shoboi: Optional[int]
     """Shoboi ID of the anime"""
     shikimori: Optional[int]
@@ -172,6 +174,8 @@ class AnimeRelation:
     """Notify.moe Base64 of the anime"""
     otakotaku: Optional[int] = None
     """Otak Otaku ID of the anime"""
+    simkl: Optional[int] = None
+    """SIMKL ID of the anime"""
     shoboi: Optional[int] = None
     """Shoboi ID of the anime"""
     shikimori: Optional[int] = None
@@ -211,6 +215,7 @@ class AnimeRelation:
             "nautiljon_id": self.nautiljon_id,
             "notify": self.notify,
             "otakotaku": self.otakotaku,
+            "simkl": self.simkl,
             "shoboi": self.shoboi,
             "shikimori": self.shikimori,
             "silveryasha": self.silveryasha,
@@ -275,6 +280,8 @@ class CountStruct:
     """Notify.moe count"""
     otakotaku: Optional[int] = None
     """Otak Otaku count"""
+    simkl: Optional[int] = None
+    """SIMKL count"""
     shikimori: Optional[int] = None
     """Shikimori count"""
     shoboi: Optional[int] = None

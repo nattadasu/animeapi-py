@@ -16,7 +16,7 @@ from animeapi.models import (AnimeRelation, ApiStatus, CountStruct, Heartbeat,
                              Platform, TraktMediaType, Updated, UpdatedStruct,
                              Version)
 
-__version__ = "3.4.0"
+__version__ = "3.5.0"
 
 __all__ = [
     "AnimeAPI",
