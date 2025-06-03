@@ -30,6 +30,8 @@ class Platform(Enum):
     """AniDB"""
     ANILIST = AL = "anilist"
     """AniList"""
+    ANIMENEWSNETWORK = AN = ANN = "animenewsnetwork"
+    """Anime News Network"""
     ANIMEPLANET = AP = ANIPLA = "animeplanet"
     """Anime-Planet"""
     ANISEARCH = AS = "anisearch"
@@ -94,6 +96,8 @@ class TypedAnimeRelationDict(TypedDict):
     """aniDB ID of the anime, without the prefix"""
     anilist: Optional[int]
     """AniList ID of the anime"""
+    animenewsnetwork: Optional[int]
+    """Anime News Network ID of the anime"""
     animeplanet: Optional[str]
     """Anime-Planet slug of the anime"""
     anisearch: Optional[int]
@@ -148,6 +152,8 @@ class AnimeRelation:
     """aniDB ID of the anime, without the prefix"""
     anilist: Optional[int] = None
     """AniList ID of the anime"""
+    animenewsnetwork: Optional[int] = None
+    """Anime News Network ID of the anime"""
     animeplanet: Optional[str] = None
     """Anime-Planet slug of the anime"""
     anisearch: Optional[int] = None
@@ -202,6 +208,7 @@ class AnimeRelation:
             "title": self.title,
             "anidb": self.anidb,
             "anilist": self.anilist,
+            "animenewsnetwork": self.animenewsnetwork,
             "animeplanet": self.animeplanet,
             "anisearch": self.anisearch,
             "annict": self.annict,
@@ -258,6 +265,8 @@ class CountStruct:
     """aniDB count"""
     anilist: Optional[int] = None
     """AniList count"""
+    animenewsnetwork: Optional[int] = None
+    """Anime News Network count"""
     animeplanet: Optional[int] = None
     """Anime-Planet count"""
     anisearch: Optional[int] = None
