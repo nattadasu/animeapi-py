@@ -9,6 +9,7 @@ async support.
 :author: nattadasu
 """
 
+from animeapi.__version__ import __version__
 from animeapi.animeapi import AnimeAPI
 from animeapi.asyncaniapi import AsyncAnimeAPI
 from animeapi.base import BaseAnimeAPI
@@ -24,7 +25,6 @@ from animeapi.models import (
     UpdatedStruct,
     Version,
 )
-from animeapi.__version__ import __version__
 
 __all__ = [
     "__version__",
