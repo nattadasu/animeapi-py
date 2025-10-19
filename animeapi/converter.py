@@ -16,22 +16,29 @@ from animeapi.models import (
     AnimeRelation,
     ApiStatus,
     Heartbeat,
+    IdsMoeAnimeRelation,
     TmdbMediaType,
     TraktMediaType,
 )
 
 
-def convert_arm(data: Dict[str, Union[str, int, None]]) -> AnimeRelation:
+def convert_arm(
+    data: Dict[str, Union[str, int, None]]
+) -> Union[AnimeRelation, IdsMoeAnimeRelation]:
     """
-    Converts a dict to an AnimeRelation object
+    Converts a dict to an AnimeRelation or IdsMoeAnimeRelation object
 
     :param data: The dict to convert
     :type data: Dict[str, Union[str, int, None]]
-    :return: The converted AnimeRelation object
-    :rtype: AnimeRelation
+    :return: The converted AnimeRelation or IdsMoeAnimeRelation object
+    :rtype: Union[AnimeRelation, IdsMoeAnimeRelation]
     """
+    if "data_hash" in data or "themoviedb_season" in data:
+        data_class = IdsMoeAnimeRelation
+    else:
+        data_class = AnimeRelation
     return from_dict(
-        data_class=AnimeRelation,
+        data_class=data_class,
         data=data,
         config=Config(cast=[TraktMediaType, TmdbMediaType]),
     )
@@ -39,28 +46,28 @@ def convert_arm(data: Dict[str, Union[str, int, None]]) -> AnimeRelation:
 
 def convert_from_dict(
     data: Dict[str, Dict[str, Union[str, int, None]]],
-) -> Dict[str, AnimeRelation]:
+) -> Dict[str, Union[AnimeRelation, IdsMoeAnimeRelation]]:
     """
     Converts a dict of dicts to a dict of AnimeRelation objects
 
     :param data: The dict to convert
     :type data: Dict[str, Dict[str, Union[str, int, None]]]
     :return: The converted dict
-    :rtype: Dict[str, AnimeRelation]
+    :rtype: Dict[str, Union[AnimeRelation, IdsMoeAnimeRelation]]
     """
     return {key: convert_arm(value) for key, value in data.items()}
 
 
 def convert_from_list(
     data: List[Dict[str, Union[str, int, None]]],
-) -> List[AnimeRelation]:
+) -> List[Union[AnimeRelation, IdsMoeAnimeRelation]]:
     """
     Converts a list of dicts to a list of AnimeRelation objects
 
     :param data: The list to convert
     :type data: List[Dict[str, Union[str, int, None]]]
     :return: The converted list
-    :rtype: List[AnimeRelation]
+    :rtype: List[Union[AnimeRelation, IdsMoeAnimeRelation]]
     """
     return [convert_arm(value) for value in data]
 

@@ -8,7 +8,7 @@ This module contains the dataclasses, enums, and other models used by the API.
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from enum import Enum
-from typing import Dict, List, Literal, Optional
+from typing import Dict, List, Literal, Optional, cast
 
 try:
     from typing import TypedDict
@@ -40,6 +40,8 @@ class Platform(Enum):
     """Annict, a Japanese anime database"""
     IMDB = "imdb"
     """IMDb, only for v3 API or above"""
+    IDS = "ids"
+    """ids.moe, a 3rd party, backward-compatible forked AnimeAPI server"""
     KAIZE = KZ = "kaize"
     """Kaize"""
     KITSU = KT = "kitsu"
@@ -90,7 +92,7 @@ class TmdbMediaType(Enum):
     """TV Show"""
 
 
-class TypedAnimeRelationDict(TypedDict):
+class TypedAnimeRelationBaseDict(TypedDict):
     """
     Typed Anime Relation Dictionary, used when user explicitly wants to use a
     dictionary using AnimeRelation.to_dict() method
@@ -118,12 +120,6 @@ class TypedAnimeRelationDict(TypedDict):
     """Kaize ID of the anime, used internally for the Kaize API"""
     kitsu: Optional[int]
     """Kitsu ID of the anime"""
-    letterboxd_lid: Optional[int]
-    """Letterboxd Letter ID, only used on 1st party API requests"""
-    letterboxd_slug: Optional[str]
-    """Letterboxd slug of the anime"""
-    letterboxd_uid: Optional[str]
-    """Letterboxd General ID, internally used"""
     livechart: Optional[int]
     """LiveChart ID of the anime"""
     myanimelist: Optional[int]
@@ -146,30 +142,56 @@ class TypedAnimeRelationDict(TypedDict):
     """SilverYasha Database Tontonan Indonesia ID of the anime"""
     themoviedb: Optional[int]
     """TheMovieDB ID of the anime, can be movie or TV show"""
-    themoviedb_season_id: Optional[int]
-    """TheMovieDB season ID, only available for TV shows"""
     themoviedb_type: Optional[Literal["movie", "tv"]]
     """TheMovieDB media type, can be movie or tv"""
-    thetvdb: Optional[int]
-    """The TVDB ID of the anime"""
-    thetvdb_season_id: Optional[int]
-    """The TVDB season ID"""
     trakt: Optional[int]
     """Trakt ID of the anime"""
-    trakt_may_invalid: Optional[bool]
-    """Whether the entry is a split cour merged by Trakt/TMDB"""
     trakt_season: Optional[int]
     """Trakt Season number, None if its a movie"""
-    trakt_season_id: Optional[int]
-    """Trakt Season ID"""
-    trakt_slug: Optional[str]
-    """Trakt slug of the anime"""
     trakt_type: Optional[Literal["shows", "movies"]]
     """Trakt Media Type of the anime"""
 
 
+class TypedAnimeRelationDict(TypedAnimeRelationBaseDict, total=False):
+    """
+    Typed Anime Relation Dictionary, used when user explicitly wants to use a
+    dictionary using AnimeRelation.to_dict() method
+    """
+
+    letterboxd_lid: int
+    """Letterboxd Letter ID, only used on 1st party API requests"""
+    letterboxd_slug: str
+    """Letterboxd slug of the anime"""
+    letterboxd_uid: str
+    """Letterboxd General ID, internally used"""
+    themoviedb_season_id: int
+    """TheMovieDB season ID, only available for TV shows"""
+    thetvdb: int
+    """The TVDB ID of the anime"""
+    thetvdb_season_id: int
+    """The TVDB season ID"""
+    trakt_may_invalid: bool
+    """Whether the entry is a split cour merged by Trakt/TMDB"""
+    trakt_season_id: int
+    """Trakt Season ID"""
+    trakt_slug: str
+    """Trakt slug of the anime"""
+
+
+class TypedIdsMoeAnimeRelationDict(TypedAnimeRelationBaseDict, total=False):
+    """
+    Typed Anime Relation Dictionary for ids.moe, used when user explicitly wants to use a
+    dictionary using IdsMoeAnimeRelation.to_dict() method
+    """
+
+    themoviedb_season: int
+    """TheMovieDB season number, only available for TV shows"""
+    data_hash: str
+    """Data hash of the anime"""
+
+
 @dataclass
-class AnimeRelation:
+class AnimeRelationBase:
     """Anime Relations Dataclass"""
 
     title: str
@@ -194,12 +216,6 @@ class AnimeRelation:
     """Kaize ID of the anime, used internally for the Kaize API"""
     kitsu: Optional[int] = None
     """Kitsu ID of the anime"""
-    letterboxd_lid: Optional[int] = None
-    """Letterboxd Letter ID, only used on 1st party API requests"""
-    letterboxd_slug: Optional[str] = None
-    """Letterboxd slug of the anime"""
-    letterboxd_uid: Optional[str] = None
-    """Letterboxd General ID, internally used"""
     livechart: Optional[int] = None
     """LiveChart ID of the anime"""
     myanimelist: Optional[int] = None
@@ -222,33 +238,20 @@ class AnimeRelation:
     """SilverYasha Database Tontonan Indonesia ID of the anime"""
     themoviedb: Optional[int] = None
     """TheMovieDB ID of the anime, can be movie or TV show"""
-    themoviedb_season_id: Optional[int] = None
-    """TheMovieDB season ID, only available for TV shows"""
     themoviedb_type: Optional[TmdbMediaType] = None
     """TheMovieDB media type, can be movie or tv"""
-    thetvdb: Optional[int] = None
-    """The TVDB ID of the anime"""
-    thetvdb_season_id: Optional[int] = None
-    """The TVDB season ID"""
     trakt: Optional[int] = None
     """Trakt ID of the anime"""
-    trakt_may_invalid: Optional[bool] = None
-    """Whether the entry is a split cour merged by Trakt/TMDB"""
     trakt_season: Optional[int] = None
     """Trakt Season number, None if its a movie"""
-    trakt_season_id: Optional[int] = None
-    """Trakt Season ID"""
-    trakt_slug: Optional[str] = None
-    """Trakt slug of the anime"""
     trakt_type: Optional[TraktMediaType] = None
     """Trakt Media Type of the anime"""
 
-    def to_dict(self) -> TypedAnimeRelationDict:
+    def to_dict_base(self) -> TypedAnimeRelationBaseDict:
         """
-        Converts the AnimeRelation object to a dictionary
-
+        Converts the AnimeRelationBase object to a dictionary
         :return: The converted dictionary
-        :rtype: TypedAnimeRelationDict
+        :rtype: TypedAnimeRelationBaseDict
         """
         return {
             "title": self.title,
@@ -262,9 +265,6 @@ class AnimeRelation:
             "kaize": self.kaize,
             "kaize_id": self.kaize_id,
             "kitsu": self.kitsu,
-            "letterboxd_lid": self.letterboxd_lid,
-            "letterboxd_slug": self.letterboxd_slug,
-            "letterboxd_uid": self.letterboxd_uid,
             "livechart": self.livechart,
             "myanimelist": self.myanimelist,
             "nautiljon": self.nautiljon,
@@ -276,19 +276,84 @@ class AnimeRelation:
             "shikimori": self.shikimori,
             "silveryasha": self.silveryasha,
             "themoviedb": self.themoviedb,
-            "themoviedb_season_id": self.themoviedb_season_id,
             "themoviedb_type": self.themoviedb_type.value
             if self.themoviedb_type
             else None,
-            "thetvdb": self.thetvdb,
-            "thetvdb_season_id": self.thetvdb_season_id,
             "trakt": self.trakt,
-            "trakt_may_invalid": self.trakt_may_invalid,
             "trakt_season": self.trakt_season,
-            "trakt_season_id": self.trakt_season_id,
-            "trakt_slug": self.trakt_slug,
             "trakt_type": self.trakt_type.value if self.trakt_type else None,
         }
+
+
+@dataclass
+class AnimeRelation(AnimeRelationBase):
+    """Anime Relations Dataclass"""
+
+    letterboxd_lid: Optional[int] = None
+    """Letterboxd Letter ID, only used on 1st party API requests"""
+    letterboxd_slug: Optional[str] = None
+    """Letterboxd slug of the anime"""
+    letterboxd_uid: Optional[str] = None
+    """Letterboxd General ID, internally used"""
+    themoviedb_season_id: Optional[int] = None
+    """TheMovieDB season ID, only available for TV shows"""
+    thetvdb: Optional[int] = None
+    """The TVDB ID of the anime"""
+    thetvdb_season_id: Optional[int] = None
+    """The TVDB season ID"""
+    trakt_may_invalid: Optional[bool] = None
+    """Whether the entry is a split cour merged by Trakt/TMDB"""
+    trakt_season_id: Optional[int] = None
+    """Trakt Season ID"""
+    trakt_slug: Optional[str] = None
+    """Trakt slug of the anime"""
+
+    def to_dict(self) -> TypedAnimeRelationDict:
+        """
+        Converts the AnimeRelation object to a dictionary
+        :return: The converted dictionary
+        :rtype: TypedAnimeRelationDict
+        """
+        base_dict = self.to_dict_base()
+        base_dict.update(
+            {
+                "letterboxd_lid": self.letterboxd_lid,
+                "letterboxd_slug": self.letterboxd_slug,
+                "letterboxd_uid": self.letterboxd_uid,
+                "themoviedb_season_id": self.themoviedb_season_id,
+                "thetvdb": self.thetvdb,
+                "thetvdb_season_id": self.thetvdb_season_id,
+                "trakt_may_invalid": self.trakt_may_invalid,
+                "trakt_season_id": self.trakt_season_id,
+                "trakt_slug": self.trakt_slug,
+            }
+        )
+        return cast(TypedAnimeRelationDict, base_dict)
+
+
+@dataclass
+class IdsMoeAnimeRelation(AnimeRelationBase):
+    """Anime Relations Dataclass for ids.moe"""
+
+    themoviedb_season: Optional[int] = None
+    """TheMovieDB season number, only available for TV shows"""
+    data_hash: Optional[str] = None
+    """Data hash of the anime"""
+
+    def to_dict(self) -> TypedIdsMoeAnimeRelationDict:
+        """
+        Converts the IdsMoeAnimeRelation object to a dictionary
+        :return: The converted dictionary
+        :rtype: TypedIdsMoeAnimeRelationDict
+        """
+        base_dict = self.to_dict_base()
+        base_dict.update(
+            {
+                "themoviedb_season": self.themoviedb_season,
+                "data_hash": self.data_hash,
+            }
+        )
+        return cast(TypedIdsMoeAnimeRelationDict, base_dict)
 
 
 @dataclass
