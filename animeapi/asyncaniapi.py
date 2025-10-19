@@ -25,7 +25,7 @@ class AsyncAnimeAPI:
         self,
         base_url: Union[models.Version, str] = models.Version.V3,
         timeout: Optional[int] = 100,
-        headers: Optional[Dict[str, Any]] = None
+        headers: Optional[Dict[str, Any]] = None,
     ) -> None:
         """
         Initializes the AnimeAPI class
@@ -65,8 +65,9 @@ class AsyncAnimeAPI:
         self,
         title_id: Union[str, int],
         platform: Union[str, models.Platform],
-        media_type: Union[models.TraktMediaType,
-                          models.TmdbMediaType, str, None] = None,
+        media_type: Union[
+            models.TraktMediaType, models.TmdbMediaType, str, None
+        ] = None,
         title_season: Optional[int] = None,
     ) -> models.AnimeRelation:
         """
@@ -97,16 +98,19 @@ class AsyncAnimeAPI:
             media_type = media_type.value
 
         # check if platform is either IMDb or TMDB but using V2
-        if platform in ["imdb", "themoviedb"] and self.base_url == models.Version.V2.value:
-            raise excepts.UnsupportedVersion(
-                f"{platform} is not supported on V2")
+        if (
+            platform in ["imdb", "themoviedb"]
+            and self.base_url == models.Version.V2.value
+        ):
+            raise excepts.UnsupportedVersion(f"{platform} is not supported on V2")
 
         if platform == "trakt":
             if media_type is None:
                 raise excepts.MissingRequirement("Trakt requires a media type")
             if title_season == 0:
                 raise ValueError(
-                    "AnimeAPI does not support season 0 (specials) for Trakt shows")
+                    "AnimeAPI does not support season 0 (specials) for Trakt shows"
+                )
         elif platform == "themoviedb":
             if media_type is None:
                 raise excepts.MissingRequirement("TMDB requires a media type")
@@ -119,7 +123,8 @@ class AsyncAnimeAPI:
         if platform == "trakt":
             if not f"{title_id}".isdigit():
                 raise ValueError(
-                    "Media ID of Trakt is not an integer ID. Please resolve it first before continuing")
+                    "Media ID of Trakt is not an integer ID. Please resolve it first before continuing"
+                )
             title_id = f"{media_type}/{title_id}"
             if title_season is not None and media_type == "shows":
                 season = f"/seasons/{title_season}"
@@ -141,25 +146,25 @@ class AsyncAnimeAPI:
             if not title_id.isdigit():
                 async with self.session.get(
                     f"https://kitsu.io/api/edge/anime?filter[slug]={title_id}",
-                        timeout=self.timeout) as slug_req:
+                    timeout=self.timeout,
+                ) as slug_req:
                     if slug_req.status != 200:
                         raise aiohttp.ClientResponseError(
                             slug_req.request_info,
                             slug_req.history,
-                            code=slug_req.status)
+                            code=slug_req.status,
+                        )
                     title_id = (await slug_req.json())["data"][0]["id"]
 
         path = f"/{platform}/{title_id}{season}"
 
         async with self.session.get(
-            f"{self.base_url}{path}",
-            timeout=self.timeout,
-                headers=self.headers) as req:
+            f"{self.base_url}{path}", timeout=self.timeout, headers=self.headers
+        ) as req:
             if req.status != 200:
                 raise aiohttp.ClientResponseError(
-                    req.request_info,
-                    req.history,
-                    code=req.status)
+                    req.request_info, req.history, code=req.status
+                )
             return conv.convert_arm(loads(await req.text()))
 
     async def get_dict_anime_relations(
@@ -185,19 +190,21 @@ class AsyncAnimeAPI:
             platform = platform.value
 
         # check if platform is either IMDb or TMDB but using V2
-        if platform in ["imdb", "themoviedb"] and self.base_url == models.Version.V2.value:
-            raise excepts.UnsupportedVersion(
-                f"{platform} is not supported on V2")
+        if (
+            platform in ["imdb", "themoviedb"]
+            and self.base_url == models.Version.V2.value
+        ):
+            raise excepts.UnsupportedVersion(f"{platform} is not supported on V2")
 
         async with self.session.get(
             f"{self.base_url}/{platform}.json",
             timeout=self.timeout,
-                headers=self.headers) as req:
+            headers=self.headers,
+        ) as req:
             if req.status not in [200, 302, 304]:
                 raise aiohttp.ClientResponseError(
-                    req.request_info,
-                    req.history,
-                    code=req.status)
+                    req.request_info, req.history, code=req.status
+                )
             return conv.convert_from_dict(loads(await req.text()))
 
     async def get_list_anime_relations(
@@ -223,17 +230,21 @@ class AsyncAnimeAPI:
             platform = platform.value
 
         # check if platform is either IMDb or TMDB but using V2
-        if platform in ["imdb", "themoviedb"] and self.base_url == models.Version.V2.value:
-            raise excepts.UnsupportedVersion(
-                f"{platform} is not supported on V2")
+        if (
+            platform in ["imdb", "themoviedb"]
+            and self.base_url == models.Version.V2.value
+        ):
+            raise excepts.UnsupportedVersion(f"{platform} is not supported on V2")
 
         async with self.session.get(
             f"{self.base_url}/{platform}().json",
             timeout=self.timeout,
-                headers=self.headers) as req:
+            headers=self.headers,
+        ) as req:
             if req.status not in [200, 302, 304]:
                 raise aiohttp.ClientResponseError(
-                    req.request_info, req.history, code=req.status)
+                    req.request_info, req.history, code=req.status
+                )
             return conv.convert_from_list(loads(await req.text()))
 
     async def get_list_index(self) -> List[models.AnimeRelation]:
@@ -267,14 +278,12 @@ class AsyncAnimeAPI:
             raise excepts.UnsupportedVersion("Status is only supported on V3")
 
         async with self.session.get(
-            f"{self.base_url}/status",
-            timeout=self.timeout,
-                headers=self.headers) as req:
+            f"{self.base_url}/status", timeout=self.timeout, headers=self.headers
+        ) as req:
             if req.status != 200:
                 raise aiohttp.ClientResponseError(
-                    req.request_info,
-                    req.history,
-                    code=req.status)
+                    req.request_info, req.history, code=req.status
+                )
             return conv.convert_api_status(loads(await req.text()))
 
     async def get_heartbeat(self) -> models.Heartbeat:
@@ -291,18 +300,15 @@ class AsyncAnimeAPI:
             raise RuntimeError("Session is not initialized")
 
         if self.base_url == models.Version.V2.value:
-            raise excepts.UnsupportedVersion(
-                "Heartbeat is only supported on V3")
+            raise excepts.UnsupportedVersion("Heartbeat is only supported on V3")
 
         async with self.session.get(
-            f"{self.base_url}/heartbeat",
-            timeout=self.timeout,
-                headers=self.headers) as req:
+            f"{self.base_url}/heartbeat", timeout=self.timeout, headers=self.headers
+        ) as req:
             if req.status != 200:
                 raise aiohttp.ClientResponseError(
-                    req.request_info,
-                    req.history,
-                    code=req.status)
+                    req.request_info, req.history, code=req.status
+                )
             return conv.convert_heartbeat(loads(await req.text()))
 
     async def get_updated_time(self) -> models.Updated:
@@ -318,14 +324,12 @@ class AsyncAnimeAPI:
             raise RuntimeError("Session is not initialized")
 
         async with self.session.get(
-            f"{self.base_url}/updated",
-            timeout=self.timeout,
-                headers=self.headers) as req:
+            f"{self.base_url}/updated", timeout=self.timeout, headers=self.headers
+        ) as req:
             if req.status != 200:
                 raise aiohttp.ClientResponseError(
-                    req.request_info,
-                    req.history,
-                    code=req.status)
+                    req.request_info, req.history, code=req.status
+                )
 
             text = await req.text()
             return models.Updated(text)

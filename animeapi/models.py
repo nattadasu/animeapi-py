@@ -148,7 +148,7 @@ class TypedAnimeRelationDict(TypedDict):
     """TheMovieDB ID of the anime, can be movie or TV show"""
     themoviedb_season_id: Optional[int]
     """TheMovieDB season ID, only available for TV shows"""
-    themoviedb_type: Optional[Literal['movie', 'tv']]
+    themoviedb_type: Optional[Literal["movie", "tv"]]
     """TheMovieDB media type, can be movie or tv"""
     thetvdb: Optional[int]
     """The TVDB ID of the anime"""
@@ -164,7 +164,7 @@ class TypedAnimeRelationDict(TypedDict):
     """Trakt Season ID"""
     trakt_slug: Optional[str]
     """Trakt slug of the anime"""
-    trakt_type: Optional[Literal['shows', 'movies']]
+    trakt_type: Optional[Literal["shows", "movies"]]
     """Trakt Media Type of the anime"""
 
 
@@ -277,7 +277,9 @@ class AnimeRelation:
             "silveryasha": self.silveryasha,
             "themoviedb": self.themoviedb,
             "themoviedb_season_id": self.themoviedb_season_id,
-            "themoviedb_type": self.themoviedb_type.value if self.themoviedb_type else None,
+            "themoviedb_type": self.themoviedb_type.value
+            if self.themoviedb_type
+            else None,
             "thetvdb": self.thetvdb,
             "thetvdb_season_id": self.thetvdb_season_id,
             "trakt": self.trakt,
@@ -428,7 +430,6 @@ class Updated:
         :return: the datetime object
         :rtype: datetime
         """
-        time = datetime.strptime(
-            self.message, "Updated on %m/%d/%Y %H:%M:%S UTC")
+        time = datetime.strptime(self.message, "Updated on %m/%d/%Y %H:%M:%S UTC")
         time = time.replace(tzinfo=timezone.utc)
         return time
