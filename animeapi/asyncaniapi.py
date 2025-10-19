@@ -8,41 +8,21 @@ interacting with AnimeAPI through asynchronous requests.
 Please refer to the documentation for more information and examples.
 """
 
-from enum import Enum
 from json import loads
-from typing import Any, Dict, List, Optional, Union
+from typing import Dict, List, Optional, Union
 
 import aiohttp
 
 import animeapi.converter as conv
 from animeapi import excepts, models
+from animeapi.base import BaseAnimeAPI
 
 
-class AsyncAnimeAPI:
+class AsyncAnimeAPI(BaseAnimeAPI):
     """The main class for interacting with the aniapi API"""
 
-    def __init__(
-        self,
-        base_url: Union[models.Version, str] = models.Version.V3,
-        timeout: Optional[int] = 100,
-        headers: Optional[Dict[str, Any]] = None,
-    ) -> None:
-        """
-        Initializes the AnimeAPI class
-
-        :param base_url: The base URL to use for requests, defaults to models.Version.V3
-        :type base_url: Union[models.Version, str] (optional)
-        :param timeout: The timeout for requests, defaults to 100
-        :type timeout: int (optional)
-        :param headers: The headers to use for requests, defaults to None
-        :type headers: Dict[str, Any] (optional)
-        """
-        self.timeout = timeout
-        self.headers = headers
-        if isinstance(base_url, models.Version):
-            self.base_url = base_url.value
-        else:
-            self.base_url = base_url
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
         self.session: Optional[aiohttp.ClientSession] = None
 
     async def __aenter__(self):
@@ -59,7 +39,6 @@ class AsyncAnimeAPI:
         """Closes the session"""
         if self.session is not None:
             await self.session.close()
-        return
 
     async def get_anime_relations(
         self,
@@ -68,7 +47,7 @@ class AsyncAnimeAPI:
         media_type: Union[
             models.TraktMediaType, models.TmdbMediaType, str, None
         ] = None,
-        title_season: Optional[int] = None,
+        title_season: Union[int, None] = None,
     ) -> models.AnimeRelation:
         """
         Gets the relations for an anime
@@ -93,55 +72,11 @@ class AsyncAnimeAPI:
             raise RuntimeError("Session is not initialized")
 
         if isinstance(platform, models.Platform):
-            platform = platform.value
-        if isinstance(media_type, Enum):
-            media_type = media_type.value
+            platform_val = platform.value
+        else:
+            platform_val = platform
 
-        # check if platform is either IMDb or TMDB but using V2
-        if (
-            platform in ["imdb", "themoviedb"]
-            and self.base_url == models.Version.V2.value
-        ):
-            raise excepts.UnsupportedVersion(f"{platform} is not supported on V2")
-
-        if platform == "trakt":
-            if media_type is None:
-                raise excepts.MissingRequirement("Trakt requires a media type")
-            if title_season == 0:
-                raise ValueError(
-                    "AnimeAPI does not support season 0 (specials) for Trakt shows"
-                )
-        elif platform == "themoviedb":
-            if media_type is None:
-                raise excepts.MissingRequirement("TMDB requires a media type")
-        elif platform == "thetvdb":
-            # THETVDB uses series/ID format
-            pass
-
-        # build path
-        season = ""
-        if platform == "trakt":
-            if not f"{title_id}".isdigit():
-                raise ValueError(
-                    "Media ID of Trakt is not an integer ID. Please resolve it first before continuing"
-                )
-            title_id = f"{media_type}/{title_id}"
-            if title_season is not None and media_type == "shows":
-                season = f"/seasons/{title_season}"
-        elif platform == "themoviedb":
-            title_id = f"{media_type}/{title_id}"
-            if title_season is not None and media_type == "tv":
-                season = f"/season/{title_season}"
-        elif platform == "thetvdb":
-            title_id = f"series/{title_id}"
-            if title_season is not None:
-                season = f"/seasons/{title_season}"
-        elif platform == "shikimori":
-            title_id = str(title_id)
-            if not title_id.isdigit():
-                # drop any non-digit characters
-                title_id = "".join([c for c in title_id if c.isdigit()])
-        elif platform == "kitsu":
+        if platform_val == "kitsu":
             title_id = str(title_id)
             if not title_id.isdigit():
                 async with self.session.get(
@@ -156,7 +91,7 @@ class AsyncAnimeAPI:
                         )
                     title_id = (await slug_req.json())["data"][0]["id"]
 
-        path = f"/{platform}/{title_id}{season}"
+        path = self._build_path(title_id, platform, media_type, title_season)
 
         async with self.session.get(
             f"{self.base_url}{path}", timeout=self.timeout, headers=self.headers

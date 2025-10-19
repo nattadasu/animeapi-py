@@ -40,5 +40,5 @@ Source = "https://github.com/nattadasu/animeapi-py"
 Homepage = "https://animeapi.my.id"
 
 [tool.setuptools.dynamic]
-version = { attr = "animeapi.__version__" }
+version = { attr = "animeapi.__version__.__version__" }
 readme = { file = "README.rst" }

@@ -11,6 +11,7 @@ async support.
 
 from animeapi.animeapi import AnimeAPI
 from animeapi.asyncaniapi import AsyncAnimeAPI
+from animeapi.base import BaseAnimeAPI
 from animeapi.excepts import MissingRequirement, UnsupportedVersion
 from animeapi.models import (
     AnimeRelation,
@@ -23,14 +24,15 @@ from animeapi.models import (
     UpdatedStruct,
     Version,
 )
-
-__version__ = "3.6.0"
+from animeapi.__version__ import __version__
 
 __all__ = [
+    "__version__",
     "AnimeAPI",
     "AnimeRelation",
     "ApiStatus",
     "AsyncAnimeAPI",
+    "BaseAnimeAPI",
     "CountStruct",
     "Heartbeat",
     "MissingRequirement",
