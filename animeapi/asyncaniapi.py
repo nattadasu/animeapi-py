@@ -129,7 +129,8 @@ class AsyncAnimeAPI(BaseAnimeAPI):
             platform in ["imdb", "themoviedb"]
             and self.base_url == models.Version.V2.value
         ):
-            raise excepts.UnsupportedVersion(f"{platform} is not supported on V2")
+            raise excepts.UnsupportedVersion(
+                f"{platform} is not supported on V2")
 
         async with self.session.get(
             f"{self.base_url}/{platform}.json",
@@ -169,7 +170,8 @@ class AsyncAnimeAPI(BaseAnimeAPI):
             platform in ["imdb", "themoviedb"]
             and self.base_url == models.Version.V2.value
         ):
-            raise excepts.UnsupportedVersion(f"{platform} is not supported on V2")
+            raise excepts.UnsupportedVersion(
+                f"{platform} is not supported on V2")
 
         async with self.session.get(
             f"{self.base_url}/{platform}().json",
@@ -235,7 +237,8 @@ class AsyncAnimeAPI(BaseAnimeAPI):
             raise RuntimeError("Session is not initialized")
 
         if self.base_url == models.Version.V2.value:
-            raise excepts.UnsupportedVersion("Heartbeat is only supported on V3")
+            raise excepts.UnsupportedVersion(
+                "Heartbeat is only supported on V3")
 
         async with self.session.get(
             f"{self.base_url}/heartbeat", timeout=self.timeout, headers=self.headers

@@ -495,6 +495,7 @@ class Updated:
         :return: the datetime object
         :rtype: datetime
         """
-        time = datetime.strptime(self.message, "Updated on %m/%d/%Y %H:%M:%S UTC")
+        time = datetime.strptime(
+            self.message, "Updated on %m/%d/%Y %H:%M:%S UTC")
         time = time.replace(tzinfo=timezone.utc)
         return time

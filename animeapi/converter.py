@@ -12,14 +12,9 @@ from typing import Any, Dict, List, Union
 
 from dacite import Config, from_dict
 
-from animeapi.models import (
-    AnimeRelation,
-    ApiStatus,
-    Heartbeat,
-    IdsMoeAnimeRelation,
-    TmdbMediaType,
-    TraktMediaType,
-)
+from animeapi.models import (AnimeRelation, ApiStatus, Heartbeat,
+                             IdsMoeAnimeRelation, TmdbMediaType,
+                             TraktMediaType)
 
 
 def convert_arm(
