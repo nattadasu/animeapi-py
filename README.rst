@@ -6,7 +6,7 @@ animeapi-python is a Python wrapper for the
 `nattadasu <https://github.com/nattadasu>`__.
 
 The wrapper is released with type hints and async support in mind for
-ease of use and is compatible with Python 3.6 or higher.
+ease of use and is compatible with Python 3.7 or higher.
 
 Installation
 ------------
@@ -63,20 +63,25 @@ You must use the wrapper in ``with`` statement, or you will receive
 
 .. code:: py
 
+   import asyncio
    import animeapi
 
-   async with animeapi.AsyncAnimeAPI() as api:
-       # Get anime relation data for the anime with ID 1 on MyAnimeList
-       mal = await api.get_anime_relations(1, animeapi.Platform.MYANIMELIST)
-       print(mal)
+   async def main():
+       async with animeapi.AsyncAnimeAPI() as api:
+           # Get anime relation data for the anime with ID 1 on MyAnimeList
+           mal = await api.get_anime_relations(1, animeapi.Platform.MYANIMELIST)
+           print(mal)
 
-       # Get list of anime available on AniList
-       anilist = await api.get_list_anime_relations(animeapi.Platform.ANILIST)
-       print(anilist[:2])  # Print first two results
+           # Get list of anime available on AniList
+           anilist = await api.get_list_anime_relations(animeapi.Platform.ANILIST)
+           print(anilist[:2])  # Print first two results
 
-       # Get dictionary of anime available on Kitsu
-       kitsu = await api.get_dict_anime_relations(animeapi.Platform.KITSU)
-       print(kitsu['1'])  # Print data for Cowboy Bebop
+           # Get dictionary of anime available on Kitsu
+           kitsu = await api.get_dict_anime_relations(animeapi.Platform.KITSU)
+           print(kitsu['1'])  # Print data for Cowboy Bebop
+
+   if __name__ == "__main__":
+       asyncio.run(main())
 
 Documentation
 -------------
@@ -146,8 +151,8 @@ This method equals to the ``/animeapi`` endpoint on the API.
 .. code:: py
 
    # Get list of anime available on AnimeAPI
-   animeapi = api.get_list_index()
-   print(animeapi[:2])  # Print first two results
+   animeapi_list = api.get_list_index()
+   print(animeapi_list[:2])  # Print first two results
 
 ``get_status() -> ApiStatus``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -179,7 +184,7 @@ This method equals to the ``/updated`` endpoint on the API.
 .. code:: py
 
    # Get last updated time of AnimeAPI
-   updated = api.get_updated_time(True)
+   updated = api.get_updated_time()
    print(updated)
    print(updated.datetime())  # Convert to datetime class
 
