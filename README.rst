@@ -97,6 +97,22 @@ This method equals to the ``/:platform/:title_id`` endpoint on the API.
    mal = api.get_anime_relations(1, animeapi.Platform.MYANIMELIST)
    print(mal)
 
+   # Get anime relation data for Trakt shows with season
+   trakt = api.get_anime_relations(152334, animeapi.Platform.TRAKT, 
+                                    media_type=animeapi.TraktMediaType.SHOWS, 
+                                    title_season=3)
+   print(trakt)
+
+   # Get anime relation data for TMDB TV shows
+   tmdb = api.get_anime_relations(12345, animeapi.Platform.THEMOVIEDB,
+                                   media_type=animeapi.TmdbMediaType.TV)
+   print(tmdb)
+
+   # Get anime relation data for The TVDB with season
+   tvdb = api.get_anime_relations(76885, animeapi.Platform.THETVDB,
+                                   title_season=1)
+   print(tvdb)
+
 ``get_dict_anime_relations(platform: str | Platform) -> dict[str, AnimeRelation]``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

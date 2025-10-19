@@ -110,9 +110,9 @@ class AnimeAPI:
         elif platform == "themoviedb":
             if media_type is None:
                 raise excepts.MissingRequirement("TMDB requires a media type")
-            if media_type == "shows":
-                raise ValueError(
-                    "AnimeAPI does not support TMDB TV shows entry yet")
+        elif platform == "thetvdb":
+            # THETVDB uses series/ID format
+            pass
 
         # build path
         season = ""
@@ -125,6 +125,12 @@ class AnimeAPI:
                 season = f"/seasons/{title_season}"
         elif platform == "themoviedb":
             title_id = f"{media_type}/{title_id}"
+            if title_season is not None and media_type == "tv":
+                season = f"/season/{title_season}"
+        elif platform == "thetvdb":
+            title_id = f"series/{title_id}"
+            if title_season is not None:
+                season = f"/seasons/{title_season}"
         elif platform == "shikimori":
             title_id = str(title_id)
             if not title_id.isdigit():

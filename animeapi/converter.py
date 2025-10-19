@@ -12,7 +12,7 @@ from typing import Any, Dict, List, Union
 
 from dacite import Config, from_dict
 
-from animeapi.models import AnimeRelation, ApiStatus, Heartbeat, TraktMediaType
+from animeapi.models import AnimeRelation, ApiStatus, Heartbeat, TmdbMediaType, TraktMediaType
 
 
 def convert_arm(data: Dict[str, Union[str, int, None]]) -> AnimeRelation:
@@ -27,7 +27,7 @@ def convert_arm(data: Dict[str, Union[str, int, None]]) -> AnimeRelation:
     return from_dict(
         data_class=AnimeRelation,
         data=data,
-        config=Config(cast=[TraktMediaType]))
+        config=Config(cast=[TraktMediaType, TmdbMediaType]))
 
 
 def convert_from_dict(
