@@ -71,7 +71,8 @@ class BaseAnimeAPI:
             platform in ["imdb", "themoviedb"]
             and self.base_url == models.Version.V2.value
         ):
-            raise excepts.UnsupportedVersion(f"{platform} is not supported on V2")
+            raise excepts.UnsupportedVersion(
+                f"{platform} is not supported on V2")
 
         if platform == "trakt":
             if media_type is None:
