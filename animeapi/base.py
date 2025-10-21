@@ -18,7 +18,7 @@ class BaseAnimeAPI:
     def __init__(
         self,
         base_url: Union[models.Version, str] = models.Version.V3,
-        timeout: Optional[int] = 100,
+        timeout: Optional[int] = 10,
         headers: Optional[Dict[str, Any]] = None,
     ) -> None:
         """
@@ -26,7 +26,7 @@ class BaseAnimeAPI:
 
         :param base_url: The base URL to use for requests, defaults to models.Version.V3
         :type base_url: Union[models.Version, str] (optional)
-        :param timeout: The timeout for requests, defaults to 100
+        :param timeout: The timeout for requests, defaults to 10
         :type timeout: int (optional)
         :param headers: The headers to use for requests, defaults to None
         :type headers: Dict[str, Any] (optional)
