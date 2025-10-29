@@ -52,6 +52,24 @@ We recommend using the ``with`` statement to create an instance of
 sync and async, although you can also use ``AnimeAPI`` directly on
 ``sync`` methods only.
 
+Custom Headers
+~~~~~~~~~~~~~~
+
+You can pass custom headers to the API client, which is useful for APIs that
+require authorization (e.g., ids.moe):
+
+.. code:: py
+
+   import animeapi
+
+   # Using custom headers for ids.moe
+   headers = {"Authorization": "Bearer YOUR_TOKEN_HERE"}
+   
+   with animeapi.AnimeAPI(base_url="https://ids.moe", headers=headers) as api:
+       # Get anime relation data with custom headers
+       mal = api.get_anime_relations(1, animeapi.Platform.MYANIMELIST)
+       print(mal)
+
 Asyncronous Usage
 ~~~~~~~~~~~~~~~~~
 
@@ -83,10 +101,28 @@ You must use the wrapper in ``with`` statement, or you will receive
    if __name__ == "__main__":
        asyncio.run(main())
 
+Custom headers can also be used with async:
+
+.. code:: py
+
+   import asyncio
+   import animeapi
+
+   async def main():
+       headers = {"Authorization": "Bearer YOUR_TOKEN_HERE"}
+       
+       async with animeapi.AsyncAnimeAPI(base_url="https://ids.moe", headers=headers) as api:
+           mal = await api.get_anime_relations(1, animeapi.Platform.MYANIMELIST)
+           print(mal)
+
+   if __name__ == "__main__":
+       asyncio.run(main())
+
 Documentation
 -------------
 
-You can find the documentation for the wrapper `here <https://animeapi-py.readthedocs.io/en/latest/>`__
+You can find the documentation for the wrapper
+`here <https://animeapi-py.readthedocs.io/en/latest/>`__
 
 Available Methods
 ~~~~~~~~~~~~~~~~~
