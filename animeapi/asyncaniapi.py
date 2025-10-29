@@ -100,6 +100,7 @@ class AsyncAnimeAPI(BaseAnimeAPI):
                 raise aiohttp.ClientResponseError(
                     req.request_info, req.history, code=req.status
                 )
+            self._check_server_version(dict(req.headers))
             return conv.convert_arm(loads(await req.text()))
 
     async def get_dict_anime_relations(
@@ -141,6 +142,7 @@ class AsyncAnimeAPI(BaseAnimeAPI):
                 raise aiohttp.ClientResponseError(
                     req.request_info, req.history, code=req.status
                 )
+            self._check_server_version(dict(req.headers))
             return conv.convert_from_dict(loads(await req.text()))
 
     async def get_list_anime_relations(
@@ -182,6 +184,7 @@ class AsyncAnimeAPI(BaseAnimeAPI):
                 raise aiohttp.ClientResponseError(
                     req.request_info, req.history, code=req.status
                 )
+            self._check_server_version(dict(req.headers))
             return conv.convert_from_list(loads(await req.text()))
 
     async def get_list_index(self) -> List[models.AnimeRelation]:
@@ -221,6 +224,7 @@ class AsyncAnimeAPI(BaseAnimeAPI):
                 raise aiohttp.ClientResponseError(
                     req.request_info, req.history, code=req.status
                 )
+            self._check_server_version(dict(req.headers))
             return conv.convert_api_status(loads(await req.text()))
 
     async def get_heartbeat(self) -> models.Heartbeat:
@@ -247,6 +251,7 @@ class AsyncAnimeAPI(BaseAnimeAPI):
                 raise aiohttp.ClientResponseError(
                     req.request_info, req.history, code=req.status
                 )
+            self._check_server_version(dict(req.headers))
             return conv.convert_heartbeat(loads(await req.text()))
 
     async def get_updated_time(self) -> models.Updated:
@@ -269,5 +274,6 @@ class AsyncAnimeAPI(BaseAnimeAPI):
                     req.request_info, req.history, code=req.status
                 )
 
+            self._check_server_version(dict(req.headers))
             text = await req.text()
             return models.Updated(text)

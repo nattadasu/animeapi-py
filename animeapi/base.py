@@ -6,10 +6,14 @@ This module contains the BaseAnimeAPI class, the base class for
 the synchronous and asynchronous AnimeAPI classes.
 """
 
+import logging
 from enum import Enum
 from typing import Any, Dict, Optional, Union
 
 from animeapi import excepts, models
+from animeapi.known_changes import KNOWN_CHANGES
+
+logger = logging.getLogger(__name__)
 
 
 class BaseAnimeAPI:
@@ -20,6 +24,7 @@ class BaseAnimeAPI:
         base_url: Union[models.Version, str] = models.Version.V3,
         timeout: Optional[int] = 10,
         headers: Optional[Dict[str, Any]] = None,
+        suppress_warnings: bool = False,
     ) -> None:
         """
         Initializes the AnimeAPI class
@@ -30,13 +35,21 @@ class BaseAnimeAPI:
         :type timeout: int (optional)
         :param headers: The headers to use for requests, defaults to None
         :type headers: Dict[str, Any] (optional)
+        :param suppress_warnings: Suppress warnings about server version, defaults to False
+        :type suppress_warnings: bool (optional)
         """
         self.timeout = timeout
         self.headers = headers
+        self.suppress_warnings = suppress_warnings
         if isinstance(base_url, models.Version):
             self.base_url = base_url.value
         else:
             self.base_url = base_url
+
+        # Get the latest known change timestamp
+        self._latest_known_timestamp = (
+            max(rev.timestamp for rev in KNOWN_CHANGES) if KNOWN_CHANGES else 0
+        )
 
     def _build_path(
         self,
@@ -105,3 +118,40 @@ class BaseAnimeAPI:
                 title_id = "".join([c for c in title_id if c.isdigit()])
 
         return f"/{platform}/{title_id}{season}"
+
+    def _check_server_version(self, headers: Dict[str, Any]) -> None:
+        """
+        Checks if the server version is outdated and logs a warning
+
+        :param headers: Response headers from the API
+        :type headers: Dict[str, Any]
+        """
+        if self.suppress_warnings or "ids.moe" in self.base_url:
+            return
+
+        server_updated = headers.get("X-ANIMEAPI-SERVER-UPDATED") or headers.get(
+            "x-animeapi-server-updated"
+        )
+        if not server_updated:
+            return
+
+        try:
+            server_timestamp = int(server_updated)
+            if server_timestamp < self._latest_known_timestamp:
+                # Get the latest revision with changes
+                latest_rev = max(KNOWN_CHANGES, key=lambda r: r.timestamp)
+                changes_summary = "; ".join(
+                    f"{change.field}: {change.message}" for change in latest_rev.changes
+                )
+
+                logger.warning(
+                    "Server is running an outdated version (server: %d, latest: %d). "
+                    "Some features may not work as expected. "
+                    "Latest changes: %s. "
+                    "Set suppress_warnings=True to hide this warning.",
+                    server_timestamp,
+                    self._latest_known_timestamp,
+                    changes_summary,
+                )
+        except (ValueError, TypeError):
+            pass

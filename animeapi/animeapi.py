@@ -91,6 +91,7 @@ class AnimeAPI(BaseAnimeAPI):
         if req.status_code != 200:
             req.raise_for_status()
 
+        self._check_server_version(req.headers)
         return conv.convert_arm(loads(req.text))
 
     def get_dict_anime_relations(
@@ -124,6 +125,7 @@ class AnimeAPI(BaseAnimeAPI):
         if req.status_code not in [200, 302, 304]:
             req.raise_for_status()
 
+        self._check_server_version(req.headers)
         return conv.convert_from_dict(loads(req.text))
 
     def get_list_anime_relations(
@@ -157,6 +159,7 @@ class AnimeAPI(BaseAnimeAPI):
         if req.status_code not in [200, 302, 304]:
             req.raise_for_status()
 
+        self._check_server_version(req.headers)
         return conv.convert_from_list(loads(req.text))
 
     def get_list_index(self) -> List[models.AnimeRelation]:
@@ -186,6 +189,7 @@ class AnimeAPI(BaseAnimeAPI):
         if req.status_code != 200:
             req.raise_for_status()
 
+        self._check_server_version(req.headers)
         return conv.convert_api_status(loads(req.text))
 
     def get_heartbeat(self) -> models.Heartbeat:
@@ -206,6 +210,7 @@ class AnimeAPI(BaseAnimeAPI):
         if req.status_code != 200:
             req.raise_for_status()
 
+        self._check_server_version(req.headers)
         return conv.convert_heartbeat(loads(req.text))
 
     def get_updated_time(self) -> models.Updated:
@@ -221,4 +226,5 @@ class AnimeAPI(BaseAnimeAPI):
         if req.status_code != 200:
             req.raise_for_status()
 
+        self._check_server_version(req.headers)
         return models.Updated(req.text)
