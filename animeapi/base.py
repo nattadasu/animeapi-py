@@ -66,14 +66,6 @@ class BaseAnimeAPI:
         if isinstance(media_type, Enum):
             media_type = media_type.value
 
-        # check if platform is either IMDb or TMDB but using V2
-        if (
-            platform in ["imdb", "themoviedb"]
-            and self.base_url == models.Version.V2.value
-        ):
-            raise excepts.UnsupportedVersion(
-                f"{platform} is not supported on V2")
-
         if platform == "trakt":
             if media_type is None:
                 raise excepts.MissingRequirement("Trakt requires a media type")
