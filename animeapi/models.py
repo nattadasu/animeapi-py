@@ -158,11 +158,11 @@ class TypedAnimeRelationDict(TypedAnimeRelationBaseDict, total=False):
     dictionary using AnimeRelation.to_dict() method
     """
 
-    letterboxd_lid: int
+    letterboxd_lid: str
     """Letterboxd Letter ID, only used on 1st party API requests"""
     letterboxd_slug: str
     """Letterboxd slug of the anime"""
-    letterboxd_uid: str
+    letterboxd_uid: int
     """Letterboxd General ID, internally used"""
     themoviedb_season_id: int
     """TheMovieDB season ID, only available for TV shows"""
@@ -289,11 +289,11 @@ class AnimeRelationBase:
 class AnimeRelation(AnimeRelationBase):
     """Anime Relations Dataclass"""
 
-    letterboxd_lid: Optional[int] = None
+    letterboxd_lid: Optional[str] = None
     """Letterboxd Letter ID, only used on 1st party API requests"""
     letterboxd_slug: Optional[str] = None
     """Letterboxd slug of the anime"""
-    letterboxd_uid: Optional[str] = None
+    letterboxd_uid: Optional[int] = None
     """Letterboxd General ID, internally used"""
     themoviedb_season_id: Optional[int] = None
     """TheMovieDB season ID, only available for TV shows"""
