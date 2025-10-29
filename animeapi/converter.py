@@ -12,13 +12,18 @@ from typing import Any, Dict, List, Union
 
 from dacite import Config, from_dict
 
-from animeapi.models import (AnimeRelation, ApiStatus, Heartbeat,
-                             IdsMoeAnimeRelation, TmdbMediaType,
-                             TraktMediaType)
+from animeapi.models import (
+    AnimeRelation,
+    ApiStatus,
+    Heartbeat,
+    IdsMoeAnimeRelation,
+    TmdbMediaType,
+    TraktMediaType,
+)
 
 
 def convert_arm(
-    data: Dict[str, Union[str, int, None]]
+    data: Dict[str, Union[str, int, None]],
 ) -> Union[AnimeRelation, IdsMoeAnimeRelation]:
     """
     Converts a dict to an AnimeRelation or IdsMoeAnimeRelation object

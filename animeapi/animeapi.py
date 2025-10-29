@@ -14,7 +14,7 @@ from typing import Dict, List, Union
 import requests
 
 import animeapi.converter as conv
-from animeapi import excepts, models
+from animeapi import models
 from animeapi.base import BaseAnimeAPI
 
 
@@ -64,7 +64,6 @@ class AnimeAPI(BaseAnimeAPI):
         :return: The relations for the anime
         :rtype: models.AnimeRelation
         :raises excepts.MissingRequirement: Raised if the platform is Trakt or TMDB but no media_type is provided
-        :raises excepts.UnsupportedVersion: Raised if the platform is IMDb or TMDB but using V2
         :raises requests.HTTPError: Raised if the request fails
         :raises ValueError: Raised if the AnimeAPI does not support the feature
         """
@@ -105,20 +104,11 @@ class AnimeAPI(BaseAnimeAPI):
         :type platform: Union[str, models.Platform]
         :return: The relations for the anime
         :rtype: Dict[str, models.AnimeRelation]
-        :raises excepts.UnsupportedVersion: Raised if the platform is IMDb or TMDB but using V2
         :raises requests.HTTPError: Raised if the request fails
         :raises ValueError: Raised if the platform is trakt but the title_season is 0
         """
         if isinstance(platform, models.Platform):
             platform = platform.value
-
-        # check if platform is either IMDb or TMDB but using V2
-        if (
-            platform in ["imdb", "themoviedb"]
-            and self.base_url == models.Version.V2.value
-        ):
-            raise excepts.UnsupportedVersion(
-                f"{platform} is not supported on V2")
 
         req = self._get(f"/{platform}.json")
 
@@ -139,20 +129,11 @@ class AnimeAPI(BaseAnimeAPI):
         :type platform: Union[str, models.Platform]
         :return: The relations for the anime
         :rtype: List[models.AnimeRelation]
-        :raises excepts.UnsupportedVersion: Raised if the platform is IMDb or TMDB but using V2
         :raises ValueError: Raised if the platform is trakt but the title_season is 0
         :raises requests.HTTPError: Raised if the request fails
         """
         if isinstance(platform, models.Platform):
             platform = platform.value
-
-        # check if platform is either IMDb or TMDB but using V2
-        if (
-            platform in ["imdb", "themoviedb"]
-            and self.base_url == models.Version.V2.value
-        ):
-            raise excepts.UnsupportedVersion(
-                f"{platform} is not supported on V2")
 
         req = self._get(f"/{platform}().json")
 
@@ -178,12 +159,8 @@ class AnimeAPI(BaseAnimeAPI):
 
         :return: The status of the API
         :rtype: models.ApiStatus
-        :raises excepts.UnsupportedVersion: Raised if the base_url is V2
         :raises requests.HTTPError: Raised if the request fails
         """
-        if self.base_url == models.Version.V2.value:
-            raise excepts.UnsupportedVersion("Status is only supported on V3")
-
         req = self._get("/status")
 
         if req.status_code != 200:
@@ -198,13 +175,8 @@ class AnimeAPI(BaseAnimeAPI):
 
         :return: The heartbeat of the API
         :rtype: models.Heartbeat
-        :raises excepts.UnsupportedVersion: Raised if the base_url is V2
         :raises requests.HTTPError: Raised if the request fails
         """
-        if self.base_url == models.Version.V2.value:
-            raise excepts.UnsupportedVersion(
-                "Heartbeat is only supported on V3")
-
         req = self._get("/heartbeat")
 
         if req.status_code != 200:

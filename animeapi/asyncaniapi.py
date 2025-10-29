@@ -14,7 +14,7 @@ from typing import Dict, List, Optional, Union
 import aiohttp
 
 import animeapi.converter as conv
-from animeapi import excepts, models
+from animeapi import models
 from animeapi.base import BaseAnimeAPI
 
 
@@ -64,7 +64,6 @@ class AsyncAnimeAPI(BaseAnimeAPI):
         :rtype: models.AnimeRelation
         :raises aiohttp.ClientResponseError: Raised if the request to the API fails
         :raises excepts.MissingRequirement: Raised if the platform is trakt but no media_type is provided
-        :raises excepts.UnsupportedVersion: Raised if the platform is IMDb or TMDB but using V2
         :raises RuntimeError: Raised if the session is not initialized
         :raises ValueError: Raised if the AnimeAPI does not support the feature
         """
@@ -115,7 +114,6 @@ class AsyncAnimeAPI(BaseAnimeAPI):
         :return: The relations for the anime
         :rtype: Dict[str, models.AnimeRelation]
         :raises aiohttp.ClientResponseError: Raised if the request to the API fails
-        :raises excepts.UnsupportedVersion: Raised if the platform is IMDb or TMDB but using V2
         :raises RuntimeError: Raised if the session is not initialized
         :raises ValueError: Raised if the platform is trakt but the title_season is 0
         """
@@ -124,14 +122,6 @@ class AsyncAnimeAPI(BaseAnimeAPI):
 
         if isinstance(platform, models.Platform):
             platform = platform.value
-
-        # check if platform is either IMDb or TMDB but using V2
-        if (
-            platform in ["imdb", "themoviedb"]
-            and self.base_url == models.Version.V2.value
-        ):
-            raise excepts.UnsupportedVersion(
-                f"{platform} is not supported on V2")
 
         async with self.session.get(
             f"{self.base_url}/{platform}.json",
@@ -157,7 +147,6 @@ class AsyncAnimeAPI(BaseAnimeAPI):
         :return: The relations for the anime
         :rtype: List[models.AnimeRelation]
         :raises aiohttp.ClientResponseError: Raised if the request to the API fails
-        :raises excepts.UnsupportedVersion: Raised if the platform is IMDb or TMDB but using V2
         :raises RuntimeError: Raised if the session is not initialized
         :raises ValueError: Raised if the platform is trakt but the title_season is 0
         """
@@ -166,14 +155,6 @@ class AsyncAnimeAPI(BaseAnimeAPI):
 
         if isinstance(platform, models.Platform):
             platform = platform.value
-
-        # check if platform is either IMDb or TMDB but using V2
-        if (
-            platform in ["imdb", "themoviedb"]
-            and self.base_url == models.Version.V2.value
-        ):
-            raise excepts.UnsupportedVersion(
-                f"{platform} is not supported on V2")
 
         async with self.session.get(
             f"{self.base_url}/{platform}().json",
@@ -208,14 +189,10 @@ class AsyncAnimeAPI(BaseAnimeAPI):
         :return: The status of the API
         :rtype: models.ApiStatus
         :raises aiohttp.ClientResponseError: Raised if the request to the API fails
-        :raises excepts.UnsupportedVersion: Raised if the base_url is V2
         :raises RuntimeError: Raised if the session is not initialized
         """
         if self.session is None:
             raise RuntimeError("Session is not initialized")
-
-        if self.base_url == models.Version.V2.value:
-            raise excepts.UnsupportedVersion("Status is only supported on V3")
 
         async with self.session.get(
             f"{self.base_url}/status", timeout=self.timeout, headers=self.headers
@@ -234,15 +211,10 @@ class AsyncAnimeAPI(BaseAnimeAPI):
         :return: The heartbeat of the API
         :rtype: models.Heartbeat
         :raises aiohttp.ClientResponseError: Raised if the request to the API fails
-        :raises excepts.UnsupportedVersion: Raised if the base_url is V2
         :raises RuntimeError: Raised if the session is not initialized
         """
         if self.session is None:
             raise RuntimeError("Session is not initialized")
-
-        if self.base_url == models.Version.V2.value:
-            raise excepts.UnsupportedVersion(
-                "Heartbeat is only supported on V3")
 
         async with self.session.get(
             f"{self.base_url}/heartbeat", timeout=self.timeout, headers=self.headers

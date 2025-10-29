@@ -14,9 +14,17 @@ from animeapi.animeapi import AnimeAPI
 from animeapi.asyncaniapi import AsyncAnimeAPI
 from animeapi.base import BaseAnimeAPI
 from animeapi.excepts import MissingRequirement, UnsupportedVersion
-from animeapi.models import (AnimeRelation, ApiStatus, CountStruct, Heartbeat,
-                             Platform, TraktMediaType, Updated, UpdatedStruct,
-                             Version)
+from animeapi.models import (
+    AnimeRelation,
+    ApiStatus,
+    CountStruct,
+    Heartbeat,
+    Platform,
+    TraktMediaType,
+    Updated,
+    UpdatedStruct,
+    Version,
+)
 
 __all__ = [
     "__version__",
