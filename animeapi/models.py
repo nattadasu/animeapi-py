@@ -38,6 +38,8 @@ class Platform(Enum):
     """aniSearch, a German anime database"""
     ANNICT = "annict"
     """Annict, a Japanese anime database"""
+    HIKKA = HK = "hikka"
+    """Hikka, Ukrainian anime database"""
     IMDB = "imdb"
     """IMDb, only for v3 API or above"""
     IDS = "ids"
@@ -112,6 +114,8 @@ class TypedAnimeRelationBaseDict(TypedDict):
     """aniSearch ID of the anime"""
     annict: Optional[int]
     """Annict ID of the anime"""
+    hikka: Optional[str]
+    """Hikka slug of the anime"""
     imdb: Optional[str]
     """IMDb ID of the anime, mostly for movies"""
     kaize: Optional[str]
@@ -208,6 +212,8 @@ class AnimeRelationBase:
     """aniSearch ID of the anime"""
     annict: Optional[int] = None
     """Annict ID of the anime"""
+    hikka: Optional[str] = None
+    """Hikka slug of the anime"""
     imdb: Optional[str] = None
     """IMDb ID of the anime, mostly for movies"""
     kaize: Optional[str] = None
@@ -261,6 +267,7 @@ class AnimeRelationBase:
             "animeplanet": self.animeplanet,
             "anisearch": self.anisearch,
             "annict": self.annict,
+            "hikka": self.hikka,
             "imdb": self.imdb,
             "kaize": self.kaize,
             "kaize_id": self.kaize_id,
@@ -396,6 +403,8 @@ class CountStruct:
     """aniSearch count"""
     annict: Optional[int] = None
     """Annict count"""
+    hikka: Optional[int] = None
+    """Hikka count"""
     imdb: Optional[int] = None
     """IMDb count"""
     kaize: Optional[int] = None
