@@ -117,6 +117,7 @@ class AsyncAnimeAPI(BaseAnimeAPI):
         :raises RuntimeError: Raised if the session is not initialized
         :raises ValueError: Raised if the platform is trakt but the title_season is 0
         """
+        raise Exception("This path is now deprecated, please parse the output from the main index instead!")
         if self.session is None:
             raise RuntimeError("Session is not initialized")
 
@@ -150,6 +151,7 @@ class AsyncAnimeAPI(BaseAnimeAPI):
         :raises RuntimeError: Raised if the session is not initialized
         :raises ValueError: Raised if the platform is trakt but the title_season is 0
         """
+        raise Exception("This path is now deprecated, please parse the output from the main index instead!")
         if self.session is None:
             raise RuntimeError("Session is not initialized")
 
