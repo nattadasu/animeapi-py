@@ -25,6 +25,36 @@ class Rev:
 
 KNOWN_CHANGES = [
     Rev(
+        1770966279,
+        [
+            Change(
+                CType.ADD,
+                "hikka",
+                "Hikka is now added to the lookup",
+            ),
+            Change(
+                CType.REM,
+                "animeapi",
+                "All platfrom-dedicated databases were deleted",
+            ),
+        ]
+    ),
+    Rev(
+        1768814119,
+        [
+            Change(
+                CType.UP,
+                "server",
+                "Fixed season path for Trakt, TMDB, and TVDB",
+            ),
+            Change(
+                CType.REM,
+                "animeapi",
+                "All platform-dedicated endpoints were set to 410",
+            ),
+        ],
+    )
+    Rev(
         1761762026,
         [
             Change(
