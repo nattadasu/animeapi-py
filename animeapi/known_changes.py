@@ -25,7 +25,7 @@ class Rev:
 
 KNOWN_CHANGES = [
     Rev(
-        1770966279,
+        1771033687,
         [
             Change(
                 CType.ADD,
@@ -37,7 +37,7 @@ KNOWN_CHANGES = [
                 "animeapi",
                 "All platfrom-dedicated databases were deleted",
             ),
-        ]
+        ],
     ),
     Rev(
         1768814119,
@@ -53,7 +53,7 @@ KNOWN_CHANGES = [
                 "All platform-dedicated endpoints were set to 410",
             ),
         ],
-    )
+    ),
     Rev(
         1761762026,
         [
@@ -74,5 +74,5 @@ KNOWN_CHANGES = [
                 "Platform-dedicated object and list endpoints were deprecated, no further update",
             ),
         ],
-    )
+    ),
 ]
