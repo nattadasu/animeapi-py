@@ -107,7 +107,9 @@ class AnimeAPI(BaseAnimeAPI):
         :raises requests.HTTPError: Raised if the request fails
         :raises ValueError: Raised if the platform is trakt but the title_season is 0
         """
-        raise Exception("This path is now deprecated, please parse the output from the main index instead!")
+        raise Exception(
+            "This path is now deprecated, please parse the output from the main index instead!"
+        )
         if isinstance(platform, models.Platform):
             platform = platform.value
 
@@ -133,7 +135,9 @@ class AnimeAPI(BaseAnimeAPI):
         :raises ValueError: Raised if the platform is trakt but the title_season is 0
         :raises requests.HTTPError: Raised if the request fails
         """
-        raise Exception("This path is now deprecated, please parse the output from the main index instead!")
+        raise Exception(
+            "This path is now deprecated, please parse the output from the main index instead!"
+        )
         if isinstance(platform, models.Platform):
             platform = platform.value
 
